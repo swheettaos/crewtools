@@ -4,7 +4,7 @@ Host tools for **Moon Sweepers** crew games: what each crew-mate may do, where a
 host chores. **Only the host needs it**; crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin, built on
 [[Crew Permissions by tylerun|Credits]].
 
-[Download the latest release](https://github.com/swheettaos/crewtools/releases/latest)
+[Nexus Mods](https://www.nexusmods.com/moonsweepers/mods/149) · [Download the latest release](https://github.com/swheettaos/crewtools/releases/latest) · [Website](https://swheettaos.github.io/crewtools/)
 
 **Runs on its own.** **With [LunarLink](https://swheettaos.github.io/lunarlink/) it's hot-loadable and updates itself in place, with no restart:** your
 crew keeps playing while it updates. See [[With LunarLink]].

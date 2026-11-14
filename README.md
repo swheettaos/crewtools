@@ -6,7 +6,7 @@ host chores. Only the host needs it; crew-mates install nothing. A BepInEx 6 (IL
 **Runs on its own** as a normal BepInEx plugin. **With [LunarLink](https://swheettaos.github.io/lunarlink/) it's hot-loadable and updates itself in place,
 with no restart:** see [On its own, or better with LunarLink](#on-its-own-or-better-with-lunarlink).
 
-[Download the latest release](https://github.com/swheettaos/crewtools/releases/latest) ·
+[Nexus Mods](https://www.nexusmods.com/moonsweepers/mods/149) · [Download the latest release](https://github.com/swheettaos/crewtools/releases/latest) ·
 [Docs site](https://swheettaos.github.io/crewtools/) · [Wiki](https://github.com/swheettaos/crewtools/wiki) · [API](https://swheettaos.github.io/crewtools/api.html) ·
 [Changelog](CHANGELOG.md) · [Report a problem](https://github.com/swheettaos/crewtools/issues/new/choose)
 
@@ -74,7 +74,7 @@ cheat watch section of `AntiCheat.cs`.
 
 Needs **BepInEx 6 (IL2CPP)**, as the game's other mods use.
 
-1. Download `CrewTools-<version>.zip` from the [latest release](https://github.com/swheettaos/crewtools/releases/latest).
+1. Download `CrewTools-<version>.zip` from [Nexus Mods](https://www.nexusmods.com/moonsweepers/mods/149) or the [latest GitHub release](https://github.com/swheettaos/crewtools/releases/latest).
 2. Close the game and unzip it into the game folder, so you get `Moon Sweepers/BepInEx/plugins/CrewTools/CrewTools.dll`.
 3. **Remove** the separate `CrewPermissions.dll` from `BepInEx/plugins` if you have it: Crew Tools includes it.
 4. Start the game. The log says "Crew Tools 1.2.4 loaded: 30 game hooks in place".

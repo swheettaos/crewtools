@@ -3,6 +3,9 @@ contact_links:
   - name: README
     url: https://github.com/swheettaos/crewtools#readme
     about: Install, what it does, the window, settings
+  - name: Nexus Mods page
+    url: https://www.nexusmods.com/moonsweepers/mods/149
+    about: Downloads, posts and comments on Nexus
   - name: Crew Permissions by tylerun
     url: https://www.nexusmods.com/moonsweepers/mods/71
     about: The mod Crew Tools' permissions and money anti-cheat come from

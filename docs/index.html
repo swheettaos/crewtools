@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Crew Tools</title>
 <meta name="description" content="Host tools for Moon Sweepers crew games: permissions, protected bases, a spending cap, anti-cheat and the host chores.">
+<meta property="og:title" content="Crew Tools">
+<meta property="og:description" content="Host tools for Moon Sweepers crew games.">
+<meta property="og:image" content="https://swheettaos.github.io/crewtools/nexus.jpg">
 <style>
   :root { --bg: #f6f5f1; --panel: #ffffff; --ink: #1c2230; --dim: #6b6a66; --line: #e2e0da; --accent: #12867a;
           --accent-soft: #dcf2ef; --get: #2f7d4a; --post: #b4531a; --code: #f0eee8; --hero1: #1c2230; --hero2: #2b3242; }
@@ -65,6 +68,8 @@
   th { color: var(--dim); font-weight: 600; font-size: 13px; }
   .tablebox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow-x: auto; }
 
+  figure.shot { margin: 28px 0 0; }
+  figure.shot img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); }
   footer { margin-top: 56px; border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--dim); font-size: 14px; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 22px; }
 </style>
@@ -81,6 +86,7 @@
     <p class="lead">Host tools for Moon Sweepers crew games: what each crew-mate may do, where and how much, cheat catching, and the host chores. Runs on its own; with LunarLink it's hot-loadable and updates itself in place.</p>
     <div class="btns">
       <a class="btn main" href="https://github.com/swheettaos/crewtools/releases/latest">Download</a>
+      <a class="btn" href="https://www.nexusmods.com/moonsweepers/mods/149">Nexus Mods</a>
       <a class="btn" href="https://github.com/swheettaos/crewtools/wiki">Wiki</a>
       <a class="btn" href="api.html">API</a>
       <a class="btn" href="https://swheettaos.github.io/lunarlink/">With LunarLink</a>
@@ -90,6 +96,8 @@
 </header>
 
 <main class="wrap">
+
+<figure class="shot"><img src="nexus.jpg" alt="Crew Tools, from its Nexus Mods page" loading="eager"></figure>
 
 <section class="keys">
   <div class="key"><b>Only the host needs it</b>Crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin, one DLL.</div>
@@ -115,7 +123,7 @@
   <h2>Install</h2>
   <p class="sub">You need BepInEx 6 (IL2CPP), as the game's other mods use.</p>
   <ol class="steps">
-    <li><b>Download the zip</b>From the <a href="https://github.com/swheettaos/crewtools/releases/latest">latest release</a>.</li>
+    <li><b>Download the zip</b>From <a href="https://www.nexusmods.com/moonsweepers/mods/149">Nexus Mods</a> or the <a href="https://github.com/swheettaos/crewtools/releases/latest">latest GitHub release</a>. A mod manager such as Vortex installs it for you.</li>
     <li><b>Unzip it into the game folder, with the game closed</b>You get <code>BepInEx/plugins/CrewTools/CrewTools.dll</code>. Remove a separate <code>CrewPermissions.dll</code> if you have one: Crew Tools includes it.</li>
     <li><b>Start the game</b>The log says "Crew Tools x.y.z loaded: 30 game hooks in place". Open the pause menu on the Moon: CREW TOOLS.</li>
   </ol>
@@ -162,6 +170,7 @@ flowchart LR
     <a class="card" href="https://github.com/swheettaos/crewtools/wiki"><h3>The wiki</h3><p>Every feature, the window, the settings, troubleshooting.</p></a>
     <a class="card" href="api.html"><h3>API</h3><p>The <code>/crew/</code> requests, searchable: what each is for, parameters, example answers.</p></a>
     <a class="card" href="https://github.com/swheettaos/crewtools/wiki/For-Tools"><h3>API recipes</h3><p>Scripts that use them: a moderation watcher, a crew overlay, a build party.</p></a>
+    <a class="card" href="https://www.nexusmods.com/moonsweepers/mods/149"><h3>Nexus Mods</h3><p>Download it, endorse it, and post in its comments.</p></a>
     <a class="card" href="https://github.com/swheettaos/crewtools/blob/main/CHANGELOG.md"><h3>Changelog</h3><p>What changed in each version.</p></a>
     <a class="card" href="https://swheettaos.github.io/lunarlink/"><h3>LunarLink</h3><p>Run Crew Tools hot: reload and update it in place, no restart.</p></a>
     <a class="card" href="https://www.nexusmods.com/moonsweepers/mods/71"><h3>Crew Permissions</h3><p>tylerun's mod that Crew Tools' permissions and money checks come from.</p></a>
@@ -174,6 +183,7 @@ flowchart LR
 <footer><div class="wrap">
   <span>Crew Tools is licensed under the <a href="https://github.com/swheettaos/crewtools/blob/main/LICENSE">GPL-3.0</a>; the parts from Crew Permissions are tylerun's, used with permission.</span>
   <a href="https://github.com/swheettaos/crewtools">Source</a>
+  <a href="https://www.nexusmods.com/moonsweepers/mods/149">Nexus Mods</a>
 </div></footer>
 
 <script type="module">
