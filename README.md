@@ -176,7 +176,9 @@ Crew Tools answers HTTP requests under `/crew/` when a mod that serves HTTP, suc
 has a public `string HandleHttp(string method, string path, NameValueCollection query, string body)` and lists the
 requests in `string[] HttpHelp()`. Without such a mod nothing calls them. Read the players (switches, trust, passes,
 spending), who is in the game now, the catches and held money, and the settings; change a player, kick, ban or unban,
-change a setting, or start the cleanup. Each change does exactly what the CREW TOOLS window's button does.
+change a setting, or start the cleanup. Each change does exactly what the CREW TOOLS window's button does. Every request with
+what it's for, its parameters and an example answer, plus recipes (a moderation watcher, a crew overlay), is on the
+wiki's [For Tools](https://github.com/swheettaos/crewtools/wiki/For-Tools) page.
 
 **Updates:** Crew Tools answers `string UpdateFeed()` with `github:swheettaos/crewtools`, so
 [LunarLink](https://github.com/swheettaos/lunarlink) (or any mod that updates plugins) can check its latest release here and install it (the zip, checked
