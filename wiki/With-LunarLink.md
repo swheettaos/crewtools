@@ -24,7 +24,8 @@ them from the game. Crew Tools is built for it.
    a copy of one that runs hot.
 3. Start the game, load a moon, press **F9** → HOT PLUGINS, and **Enable** CrewTools (a new DLL starts off). It stays on
    from then on.
-4. To update: F9 → UPDATES → **Check for updates**; the CrewTools row shows the newest release and an **Update** button.
+4. To update: F9 → UPDATES → **Check for updates** (or tick **Check for updates at game start**); the tab shows an orange
+   count when a new Crew Tools is out, and the CrewTools row has an **Update** button.
 
 ```mermaid
 flowchart LR

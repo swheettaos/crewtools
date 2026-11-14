@@ -29,7 +29,8 @@ built for it:
 
 **To run it with LunarLink:** install [LunarLink](https://github.com/swheettaos/lunarlink/releases/latest), then put `CrewTools.dll` in **`BepInEx/hot/`**
 instead of `BepInEx/plugins/CrewTools/` (not in both: LunarLink refuses to load a second copy), start the game and turn
-it on in F9 → HOT PLUGINS. From then on, F9 → UPDATES keeps it up to date.
+it on in F9 → HOT PLUGINS. From then on, F9 → UPDATES keeps it up to date: press **Check for updates**, or tick
+**Check for updates at game start**, and the tab shows an orange count when a new Crew Tools is out.
 
 More about LunarLink: [its site](https://swheettaos.github.io/lunarlink/) · [wiki](https://github.com/swheettaos/lunarlink/wiki) · [how updates work](https://github.com/swheettaos/lunarlink/wiki/Updates) ·
 [hot plugins](https://github.com/swheettaos/lunarlink/wiki/Hot-Plugins).
