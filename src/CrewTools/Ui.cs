@@ -73,9 +73,9 @@ internal static class Ui
     static int visibleRows = 9; static HashSet<ulong> onlineIds = new();
     const float W = 920f;                                                 // row width; window is 980
 
-    static RectTransform RowBox(Transform p, float y, float h = 56f) { var r = Rect("Row", p, new Vector2(W, h), new Vector2(0, y), Row); Shade(r, false); return r; }
+    static RectTransform RowBox(Transform p, float y, float h = 56f) { var r = Rect("Row", p, new Vector2(W, h), new Vector2(0, y), Panel); Shade(r, false); return r; }
     static Text RowTitle(RectTransform row, string title, float w = 460f) =>
-        Label(row, title, new Vector2(-W / 2 + 18 + w / 2, 0), new Vector2(w, 52), 19, Cream, TextAnchor.MiddleLeft);
+        Label(row, title, new Vector2(-W / 2 + 18 + w / 2, 0), new Vector2(w, 52), 19, Ink, TextAnchor.MiddleLeft);
     // an ON / OFF switch ending at xRight
     static void Toggle(RectTransform row, float xRight, Func<bool> get, Action flip, string on = "ON", string off = "OFF", float w = 110f)
     {
@@ -98,11 +98,11 @@ internal static class Ui
     static void Stepper(RectTransform row, float xRight, Func<string> value, Action minus, Action plus)
     {
         Button(row, "+", new Vector2(xRight - 25, 0), new Vector2(50, 40), () => { plus(); Refresh(); });
-        var v = Label(row, "", new Vector2(xRight - 50 - 80, 0), new Vector2(150, 40), 19, Cream, TextAnchor.MiddleCenter);
+        var v = Label(row, "", new Vector2(xRight - 50 - 80, 0), new Vector2(150, 40), 19, Ink, TextAnchor.MiddleCenter);
         Button(row, "-", new Vector2(xRight - 50 - 160 - 25 + 10, 0), new Vector2(50, 40), () => { minus(); Refresh(); });
         refreshers.Add(() => v.text = value());
     }
-    static void Hint(Transform p, string text, float y) => Label(p, text, new Vector2(0, y), new Vector2(W, 34), 16, Dim, TextAnchor.MiddleLeft);
+    static void Hint(Transform p, string text, float y) => Label(p, text, new Vector2(0, y), new Vector2(W, 34), 16, Muted, TextAnchor.MiddleLeft);
 
     static void ShowTab(string name)
     {
@@ -135,7 +135,7 @@ internal static class Ui
             tabs.Add((n, content, tb.GetComponent<Image>(), tb.GetComponentInChildren<Text>()));
         }
         BuildPlayers(win, tabs[0].content); BuildBases(tabs[1].content); BuildRules(tabs[2].content); BuildCheats(tabs[3].content); BuildServer(tabs[4].content);
-        status = Label(win, Plugin.Hooked, new Vector2(0, -425), new Vector2(W, 30), 15, Dim, TextAnchor.MiddleCenter);
+        status = Label(win, Plugin.Hooked, new Vector2(0, -425), new Vector2(W, 30), 15, Muted, TextAnchor.MiddleCenter);
         ShowTab(tabNow); Refresh();
     }
 
@@ -171,8 +171,8 @@ internal static class Ui
         for (int k = 0; k < visibleRows; k++)
         {
             int slot = k; float y = 236 - k * 54;
-            var row = Rect("Player", c, new Vector2(W, 48), new Vector2(0, y), Row); Shade(row, false);
-            var t = Label(row, "", new Vector2(-W / 2 + 18 + 150, 0), new Vector2(300, 46), 15, Cream, TextAnchor.MiddleLeft);
+            var row = Rect("Player", c, new Vector2(W, 48), new Vector2(0, y), Panel); Shade(row, false);
+            var t = Label(row, "", new Vector2(-W / 2 + 18 + 150, 0), new Vector2(300, 46), 15, Ink, TextAnchor.MiddleLeft);
             var perms = new List<(Node, Image, Text)>();
             for (int q = 0; q < PermNodes.Length; q++)
             {
@@ -185,7 +185,7 @@ internal static class Ui
             playerSlots.Add((row, t, bb.GetComponentInChildren<Text>(), perms));
         }
         Hint(c, "* differs from what new players start with (Rules tab). Manage > Reset to defaults sets them back.", 236 - visibleRows * 54 - 8);
-        var none = Label(c, "", new Vector2(0, 236), new Vector2(W, 48), 18, Dim, TextAnchor.MiddleCenter);
+        var none = Label(c, "", new Vector2(0, 236), new Vector2(W, 48), 18, Muted, TextAnchor.MiddleCenter);
         refreshers.Add(() => none.text = playerOrder.Count == 0 ? (showOnline ? "Nobody else is in the game." : "No one else has played here yet.") : "");
         RebuildOrder();
     }

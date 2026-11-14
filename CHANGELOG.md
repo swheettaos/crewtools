@@ -2,6 +2,11 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## 1.2.4
+
+- **The window's rows match Quantum Conveyors' menu:** cream like the window, set apart by their gradient, with dark
+  text (1.2.3 drew them dark). Hints and the status line are darker so they read on the cream.
+
 ## 1.2.3
 
 - **A cleaner window**, in the style of Quantum Conveyors' menus: rounded panels, rows, buttons and fields; a soft

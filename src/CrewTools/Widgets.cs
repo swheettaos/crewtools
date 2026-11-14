@@ -3,7 +3,8 @@
 // screen (Steam Deck 1280 x 800, ultrawide). Positions are from the parent's centre.
 //
 // The look matches Quantum Conveyors' menu: rounded surfaces (panels and rows 12 units, buttons 6, round help dots),
-// a soft gradient across rows, its cream panel, dark rows, grey buttons and orange accent. The rounded and gradient
+// a soft gradient across rows, its cream panel with cream rows (the gradient sets them apart), dark text, grey buttons
+// and orange accent; popups and tooltips are dark. The rounded and gradient
 // sprites are drawn once, at 2x, so their corners stay smooth.
 //
 // Buttons don't use onClick (a listener also fired on release, so Ban / Kick / Restrict stepped twice): their action is
@@ -22,7 +23,8 @@ internal static class Widgets
     internal static readonly Color Panel = new(0.937f, 0.922f, 0.882f, 1f), Ink = new(0.110f, 0.133f, 0.196f, 1f),
         Row = new(0.165f, 0.165f, 0.196f, 1f), Btn = new(0.286f, 0.286f, 0.294f, 1f), Accent = new(1f, 0.478f, 0.180f, 1f),
         Cream = new(0.949f, 0.929f, 0.894f, 1f), Dim = new(0.6f, 0.58f, 0.55f, 1f), Red = new(0.85f, 0.26f, 0.22f, 1f),
-        Grey = new(0.42f, 0.42f, 0.45f, 1f), Soft = new(0.75f, 0.74f, 0.7f, 1f);
+        Grey = new(0.42f, 0.42f, 0.45f, 1f), Soft = new(0.75f, 0.74f, 0.7f, 1f),
+        Muted = new(0.47f, 0.45f, 0.43f, 1f);                     // secondary text on the cream (QC's dim)
 
     static readonly Dictionary<int, Action> actions = new();     // button -> what a click on it does
 
