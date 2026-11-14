@@ -7,7 +7,7 @@ host chores. Only the host needs it; crew-mates install nothing. A BepInEx 6 (IL
 with no restart:** see [On its own, or better with LunarLink](#on-its-own-or-better-with-lunarlink).
 
 [Download the latest release](https://github.com/swheettaos/crewtools/releases/latest) ·
-[Docs site](https://swheettaos.github.io/crewtools/) · [Wiki](https://github.com/swheettaos/crewtools/wiki) · [API](https://github.com/swheettaos/crewtools/wiki/For-Tools) ·
+[Docs site](https://swheettaos.github.io/crewtools/) · [Wiki](https://github.com/swheettaos/crewtools/wiki) · [API](https://swheettaos.github.io/crewtools/api.html) ·
 [Changelog](CHANGELOG.md) · [Report a problem](https://github.com/swheettaos/crewtools/issues/new/choose)
 
 ## On its own, or better with LunarLink

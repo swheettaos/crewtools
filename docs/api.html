@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crew Tools API</title>
+<style>
+  :root { --bg: #f6f5f1; --panel: #ffffff; --ink: #1c2230; --dim: #6b6a66; --line: #e2e0da; --accent: #12867a; --get: #2f7d4a; --post: #b4531a; --chip: #ecebe6; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #15171c; --panel: #1e2128; --ink: #ece9e2; --dim: #9a978f; --line: #2c3039; --accent: #3ccbb5; --get: #6fcf8e; --post: #ffa25e; --chip: #2a2e37; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  header { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 16px; z-index: 1; }
+  .wrap { max-width: 1100px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--dim); font-size: 13px; margin-bottom: 12px; }
+  input[type=search] { width: 100%; font: inherit; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--ink); }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .chip { border: 1px solid var(--line); background: var(--chip); color: var(--ink); border-radius: 999px; padding: 4px 11px; font: inherit; font-size: 13px; cursor: pointer; }
+  .chip.on { background: var(--accent); border-color: var(--accent); color: #fff; }
+  main { padding: 8px 16px 40px; }
+  section { margin-top: 22px; }
+  h2 { font-size: 16px; margin: 0 0 8px; display: flex; gap: 8px; align-items: baseline; }
+  h2 .from { font-weight: normal; color: var(--dim); font-size: 13px; }
+  .ep { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 9px 12px; margin-bottom: 6px; }
+  .line { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+  .m { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; min-width: 42px; }
+  .m.GET { color: var(--get); } .m.POST { color: var(--post); }
+  .p { font: 14px ui-monospace, SFMono-Regular, Menlo, monospace; overflow-wrap: anywhere; }
+  .h { color: var(--dim); margin-top: 3px; overflow-wrap: anywhere; }
+  .none { color: var(--dim); margin-top: 30px; }
+  mark { background: color-mix(in srgb, var(--accent) 30%, transparent); color: inherit; border-radius: 2px; }
+  .home { display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; margin-bottom: 4px; }
+  .home:hover { text-decoration: underline; }
+  .ep { scroll-margin-top: var(--head, 180px); }
+  .ep.has { cursor: pointer; }
+  .ep.has:hover { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); }
+  .ep .tw { margin-left: auto; color: var(--dim); font-size: 12px; transition: transform .15s; }
+  .ep.open .tw { transform: rotate(90deg); }
+  .w { font: 600 11px ui-monospace, monospace; color: var(--post); border: 1px solid currentColor; border-radius: 4px; padding: 0 5px; }
+  .d { display: none; margin-top: 10px; border-top: 1px solid var(--line); padding-top: 10px; cursor: auto; }
+  .ep.open .d { display: block; }
+  .d p { margin: 0 0 8px; }
+  .d p.use { border-left: 3px solid var(--accent); padding: 2px 0 2px 10px; }
+  .d h4 { margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: var(--dim); }
+  .d table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  .d td, .d th { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .d th { color: var(--dim); font-weight: 600; font-size: 12px; }
+  .d td:first-child { white-space: nowrap; }
+  .d .tbl { overflow-x: auto; }
+  .d pre { margin: 0; background: var(--chip); border-radius: 6px; padding: 9px 11px; overflow: auto; max-height: 320px; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .d code, .h code { font: 13px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--chip); border-radius: 3px; padding: 0 4px; }
+  .d ul { margin: 0; padding-left: 20px; } .d li { margin: 3px 0; }
+  .tools { display: flex; gap: 12px; margin-top: 8px; font-size: 13px; }
+  .tools button { background: none; border: 0; padding: 0; color: var(--accent); font: inherit; cursor: pointer; }
+  @media (max-width: 600px) { .d td:first-child { white-space: normal; } }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <a class="home" href="./">← Crew Tools</a>
+  <h1>Crew Tools API</h1>
+  <div class="sub" id="sub"></div>
+  <input type="search" id="q" placeholder="Search paths and descriptions (e.g. ban, cap, catches)" autofocus>
+  <div class="chips" id="chips"></div>
+  <div class="tools"><button id="openall">Open all</button><button id="closeall">Close all</button></div>
+</div></header>
+<main><div class="wrap" id="list"></div></main>
+<script>
+const DATA = {"groups": [{"group": "Players", "from": "Crew Tools", "endpoints": [{"method": "GET", "path": "/crew/players", "help": "Everyone known: id (Steam id, as text), name, online, banned, switches, trusted, passes, spent and left of the cap", "d": {"group": "Players", "about": "Everyone Crew Tools knows: online or not, banned, trusted, their five switches, their base passes, and how much of the 30-minute spending cap they've spent and have left.", "use": "The roster behind any tool: a host dashboard, a script that finds who's close to the cap, or the `id` you need for every change.", "example": "GET /crew/players", "answer": "{\"cap\": 100000, \"players\": [{\"id\": \"76561190000000001\", \"name\": \"Crewmate\", \"online\": true, \"trusted\": false, \"banned\": false,\n  \"switches\": {\"build\": true, \"demolish\": false, \"sell\": true, \"shop\": true, \"capsules\": true},\n  \"passes\": [\"North\"], \"spent\": 12500, \"left\": 87500}]}\n", "notes": ["`id` is the player's Steam ID as text (it doesn't fit a JSON number).", "`left` is `null` for a trusted player: no cap."]}}, {"method": "POST", "path": "/crew/players/modify", "help": "build|demolish|sell|shop|capsules=0|1, trust=0|1, pass=<Base>&passOn=0|1, resetSpending=1, restrict=1, defaults=1", "d": {"group": "Players", "about": "Change a player, exactly as the Players tab's buttons do: their switches, trust, base passes, spending, or all switches off. Several changes can go in one request.", "use": "A moderation script (restrict someone the moment they're caught), giving a friend a pass for an event, or resetting a builder's cap after a big planned build.", "params": [["id", "Steam ID", "", "The player, as `/crew/players` lists them"], ["build, demolish, sell, shop, capsules", "0|1", "", "Switch one permission off or on"], ["trust", "0|1", "", "Trusted players have no spending cap"], ["pass, passOn", "Base, 0|1", "passOn=1", "Let them work in a protected base (North, South, East or West), or take it back"], ["resetSpending", "1", "", "Give them their full 30-minute cap again"], ["restrict", "1", "", "Every switch off"], ["defaults", "1", "", "Back to the new-player switches"]], "example": "POST /crew/players/modify?id=76561190000000001&pass=South&passOn=1&trust=1", "answer": "{\"ok\": true, \"done\": [\"trusted\", \"South pass given\"],\n \"player\": {\"id\": \"76561190000000001\", \"name\": \"Crewmate\", \"online\": true, \"trusted\": true, \"banned\": false,\n  \"switches\": {\"build\": true, \"demolish\": false, \"sell\": true, \"shop\": true, \"capsules\": true},\n  \"passes\": [\"North\", \"South\"], \"spent\": 12500, \"left\": null}}\n", "errors": ["`{\"ok\":false,\"reason\":\"id= is required\"}`", "`\"reason\": \"pass= is one of North, South, East, West\"`"]}}, {"method": "POST", "path": "/crew/players/remove", "help": "Kick, or ban (what they built is removed and refunded)", "d": {"group": "Players", "about": "Kick a player (they can rejoin), or with `ban=1` ban them: everything they built is removed and refunded to the team, a piece at a time, and their vehicles refunded with every upgrade.", "use": "Acting on a catch from a tool, or a script that bans on a confirmed cheat.", "params": [["id", "Steam ID", "", "The player"], ["ban", "1", "kick", "`1`: ban instead of kick"]], "example": "POST /crew/players/remove?id=76561190000000002&ban=1", "answer": "{\"ok\": true, \"done\": \"banned (what they built is being removed and refunded)\"}\n", "errors": ["`\"reason\": \"only while you host a game\"`", "`\"reason\": \"<name> isn't in the game right now\"`"]}}, {"method": "POST", "path": "/crew/players/unban", "help": "Unban: they can join again", "d": {"group": "Players", "about": "Unban a player: they can join again.", "use": "Undoing a ban from a tool, for example after a false catch you've checked in the logs.", "params": [["id", "Steam ID", "", "The banned player"]], "example": "POST /crew/players/unban?id=76561190000000002", "answer": "{\"ok\": true, \"done\": \"unbanned: they can join again\"}\n", "errors": ["`\"reason\": \"<name> isn't banned\"`"]}}]}, {"group": "In the game", "from": "Crew Tools", "endpoints": [{"method": "GET", "path": "/crew/now", "help": "Who's in the game now, where, and the protected base they're in", "d": {"group": "In the game", "about": "Who's in the game right now, where they are, and the protected base they're standing in, if any.", "use": "A live overlay or map of your crew, or a script that reacts when someone walks into a base.", "example": "GET /crew/now", "answer": "{\"hosting\": true, \"players\": [{\"id\": \"76561190000000001\", \"name\": \"Crewmate\", \"pos\": [12.4, 1993.1, -5.2], \"protectedBase\": \"South\"}]}\n"}}, {"method": "GET", "path": "/crew/catches", "help": "Unanswered cheating popups, money held for buildings, and the cheats log's last lines", "d": {"group": "In the game", "about": "Cheating popups waiting for your answer, building money held for a building that hasn't come yet, and the last lines of `CrewPermissions.cheats.log`.", "use": "A moderation tool: see catches without opening the game's window, and decide on them from a script or a phone.", "params": [["lines", "int", "40", "How many lines of the cheats log to include"]], "example": "GET /crew/catches?lines=5", "answer": "{\"popups\": [{\"id\": \"76561190000000002\", \"name\": \"Speedy\", \"what\": \"cheat watch: moved at 48 m/s on foot (most 30)\", \"count\": 1, \"decided\": false}],\n \"held\": [{\"id\": \"76561190000000001\", \"name\": \"Crewmate\", \"dollars\": 50}],\n \"log\": [\"... Speedy (76561190000000002): cheat watch: moved at 48 m/s on foot (most 30) ...\"]}\n", "notes": ["`what` is the reason as the popup shows it: a money catch such as \"sent trick money of $5,000\", or a cheat watch catch starting \"cheat watch: \"."]}}]}, {"group": "Settings", "from": "Crew Tools", "endpoints": [{"method": "GET", "path": "/crew/settings", "help": "Protected bases and their sizes, the spending cap, cleanup, welcome, server name, new-player switches", "d": {"group": "Settings", "about": "The protected bases and their sizes, the spending cap, the cleanup, the welcome message, the server name, and what new players start with.", "use": "Read the current rules before changing them, or show them on a dashboard.", "example": "GET /crew/settings", "answer": "{\"zones\": {\"North\": {\"on\": false, \"metres\": 150}, \"South\": {\"on\": true, \"metres\": 150}, \"East\": {\"on\": false, \"metres\": 150}, \"West\": {\"on\": false, \"metres\": 150}},\n \"cap\": 100000, \"cleanup\": true, \"cleanupMinutes\": 30, \"welcome\": true, \"welcomeText\": \"Welcome to {server}, @{name}!\",\n \"name\": \"My Crew\", \"newPlayers\": {\"build\": true, \"demolish\": false, \"sell\": true, \"shop\": true, \"capsules\": true}}\n"}}, {"method": "POST", "path": "/crew/settings/modify", "help": "zone=<Base>&on=0|1, zone=<Base>&metres=N, cap=N, name=, cleanup=0|1, cleanupMinutes=N", "d": {"group": "Settings", "about": "Change a rule, as the Bases, Rules and Server tabs do. Several changes can go in one request.", "use": "Switching rules by time or event: open a base for a build party and protect it again after, raise the cap for a planned build, rename the server for the evening.", "params": [["zone, on", "Base, 0|1", "", "Protect a base (North, South, East or West), or open it"], ["zone, metres", "Base, number", "", "Its radius round the station"], ["cap", "number", "", "The spending cap per 30 minutes"], ["name", "text", "", "Your server name"], ["cleanup", "0|1", "", "The loose-capsule cleanup on or off"], ["cleanupMinutes", "number", "", "How often it runs"]], "example": "POST /crew/settings/modify?zone=North&on=1&metres=200", "answer": "{\"ok\": true, \"done\": [\"North protected on\", \"North zone 200 m\"]}\n", "errors": ["`\"reason\": \"zone= is one of North, South, East, West\"`"]}}, {"method": "POST", "path": "/crew/cleanup", "help": "The loose-capsule cleanup in one minute (its warning goes to crew chat now)", "d": {"group": "Settings", "about": "Start the loose-capsule cleanup in one minute; its warning goes to crew chat now.", "use": "Tidying the world before you save or before an event, without waiting for the timer.", "example": "POST /crew/cleanup", "answer": "{\"ok\": true, \"done\": \"cleanup in 1 minute; the warning is in crew chat now\"}\n", "errors": ["`\"reason\": \"the cleanup is off (settings: cleanup=1)\"`"]}}]}], "note": "served under /crew/ by a mod that passes HTTP requests on to plugins, such as LunarLink (127.0.0.1:8765)"};
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+let group = null;
+function hi(text, words) {
+  let out = esc(text);
+  for (const w of words) if (w) out = out.replace(new RegExp("(" + w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + ")", "gi"), "<mark>$1</mark>");
+  return out;
+}
+// a little Markdown: `code` and **bold**
+const md = s => esc(s).replace(/`([^`]+)`/g, "<code>$1</code>").replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+const open = new Set();
+function rows(list) {
+  return `<div class="tbl"><table><tr><th>Name</th><th>Type</th><th>Default</th><th>Meaning</th></tr>` +
+    list.map(([n, t, d, m]) => `<tr><td><code>${esc(n)}</code></td><td>${esc(t)}</td><td>${esc(d || "-")}</td><td>${md(m)}</td></tr>`).join("") + `</table></div>`;
+}
+function detail(e) {
+  const d = e.d; let h = `<div class="d"><p>${md(d.about || e.help)}</p>`;
+  if (d.use) h += `<h4>What it's for</h4><p class="use">${md(d.use)}</p>`;
+  if (d.params && d.params.length) h += `<h4>Parameters</h4>` + rows(d.params);
+  if (d.body && d.body.length) h += `<h4>Body (JSON)</h4>` + rows(d.body);
+  if (d.example) h += `<h4>Example</h4><pre>${esc(d.example.trimEnd())}</pre>`;
+  if (d.answer) h += `<h4>Answer</h4><pre>${esc(d.answer.trimEnd())}</pre>`;
+  if (d.errors && d.errors.length) h += `<h4>Errors</h4><ul>${d.errors.map(x => `<li>${md(x)}</li>`).join("")}</ul>`;
+  if (d.notes && d.notes.length) h += `<h4>Notes</h4><ul>${d.notes.map(x => `<li>${md(x)}</li>`).join("")}</ul>`;
+  return h + `</div>`;
+}
+const text = e => [e.method, e.path, e.help, e.d && e.d.about, e.d && e.d.use, e.d && (e.d.notes || []).join(" "), e.d && (e.d.params || []).map(p => p.join(" ")).join(" ")].join(" ").toLowerCase();
+function render() {
+  const words = document.getElementById("q").value.trim().toLowerCase().split(/\s+/).filter(Boolean);
+  let shown = 0, html = "";
+  for (const g of DATA.groups) {
+    if (group && g.group !== group) continue;
+    const eps = g.endpoints.filter(e => words.every(w => (text(e) + " " + g.group.toLowerCase()).includes(w)));
+    if (!eps.length) continue;
+    shown += eps.length;
+    html += `<section><h2>${esc(g.group)} <span class="from">${esc(g.from)}</span></h2>` + eps.map(e => {
+      const key = e.method + " " + e.path, has = !!e.d;
+      return `<div class="ep${has ? " has" : ""}${open.has(key) ? " open" : ""}" data-k="${esc(key)}" id="${esc(e.path.replace(/\//g, "-").replace(/^-/, "") || "root")}">` +
+        `<div class="line"><span class="m ${esc(e.method)}">${esc(e.method)}</span><span class="p">${hi(e.path, words)}</span>` +
+        (e.method === "POST" && e.d && !/changes nothing/.test(e.help) ? `<span class="w" title="Changes the game: needs allow-writes">writes</span>` : "") +
+        (has ? `<span class="tw">▸</span>` : "") + `</div>` +
+        (e.help ? `<div class="h">${hi(e.help, words)}</div>` : "") + (has ? detail(e) : "") + `</div>`;
+    }).join("") + `</section>`;
+  }
+  document.getElementById("list").innerHTML = html || `<div class="none">Nothing matches.</div>`;
+  const total = DATA.groups.reduce((n, g) => n + g.endpoints.length, 0);
+  document.getElementById("sub").textContent = `${shown} of ${total} endpoints` + (DATA.note ? " · " + DATA.note : "");
+}
+function chips() {
+  const names = [null, ...new Set(DATA.groups.map(g => g.group))];
+  const box = document.getElementById("chips");
+  box.innerHTML = "";
+  for (const n of names) {
+    const b = document.createElement("button");
+    b.className = "chip" + (n === group ? " on" : ""); b.textContent = n ?? "All";
+    b.onclick = () => { group = n; chips(); render(); };
+    box.appendChild(b);
+  }
+}
+document.getElementById("q").addEventListener("input", render);
+document.getElementById("list").addEventListener("click", ev => {
+  if (ev.target.closest(".d")) return;                      // selecting text in the details doesn't close them
+  const ep = ev.target.closest(".ep.has"); if (!ep) return;
+  const k = ep.dataset.k; open.has(k) ? open.delete(k) : open.add(k); ep.classList.toggle("open");
+});
+const all = on => { for (const g of DATA.groups) for (const e of g.endpoints) if (e.d) on ? open.add(e.method + " " + e.path) : open.delete(e.method + " " + e.path); render(); };
+document.getElementById("openall").onclick = () => all(true);
+document.getElementById("closeall").onclick = () => all(false);
+// a link to #structures-remove opens that endpoint
+if (location.hash) {
+  for (const g of DATA.groups) for (const e of g.endpoints) if ("#" + e.path.replace(/\//g, "-").replace(/^-/, "") === location.hash) open.add(e.method + " " + e.path);
+}
+chips(); render();
+// the browser jumps to the #anchor itself; each endpoint's scroll-margin keeps it below the sticky header
+const setMargin = () => document.documentElement.style.setProperty("--head", document.querySelector("header").offsetHeight + 8 + "px");
+setMargin(); addEventListener("resize", setMargin);
+if (location.hash) { const el = document.querySelector(location.hash.replace(/[^#\w-]/g, "")); if (el) el.scrollIntoView(); }
+</script>
+</body>
+</html>

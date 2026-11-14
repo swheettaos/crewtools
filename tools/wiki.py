@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Builds the wiki from wiki/ into an output folder (default _wiki/): every page as it is, with each
 <!-- include: ... --> marker filled in, so the wiki never holds a stale copy of something kept elsewhere:
-  <!-- include: endpoints -->      the /crew/ requests, from HttpHelp in src/CrewTools/Http.cs
+  <!-- include: api -->            every /crew/ request in full: tools/api.py's markdown() (Http.cs + docs/endpoints.toml)
   <!-- include: CHANGELOG.md -->   the changelog
 .github/workflows/wiki.yml runs this on every push to main and publishes the result to the GitHub wiki.
 Run it yourself to look:  python3 tools/wiki.py [out]"""
@@ -10,16 +10,12 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else os.path.join(ROOT, "_wiki"))
 read = lambda p: open(os.path.join(ROOT, p)).read()
 
-def endpoints():
-    rows = []
-    for m in re.finditer(r'^\s*"((?:GET|POST) [^"|]+?)\s*\|\s*([^"]*)",?\s*$', read("src/CrewTools/Http.cs"), re.M):
-        rows.append(f"| `{m.group(1).strip()}` | {m.group(2).strip().replace('|', chr(92) + '|')} |")
-    if not rows: raise SystemExit("no endpoints found in Http.cs")
-    return "| Request | What it does |\n|---|---|\n" + "\n".join(rows)
-
 def include(m):
     what = m.group(1).strip()
-    if what == "endpoints": return endpoints()
+    if what == "api":
+        sys.path.insert(0, os.path.join(ROOT, "tools"))
+        import api
+        return api.markdown()
     if what == "CHANGELOG.md": return read("CHANGELOG.md").replace("(`tools/release.sh` tags it; GitHub publishes it)", "").rstrip()
     raise SystemExit(f"unknown include: {what}")
 

@@ -24,6 +24,12 @@ Fork, branch, pull request against `main`; the owner reviews and merges. GitHub 
 private copy of the game's DLLs; on a fork, and on a pull request from one, that build is skipped (with a note), so
 build and test locally against your own game.
 
+## Changing a /crew/ request
+
+Its one-line description is in `HttpHelp` (`src/CrewTools/Http.cs`); its details (what it's for, parameters, an
+example and an answer) are in `docs/endpoints.toml`. Then run `python3 tools/api.py`: it rewrites `docs/api.html` (the
+searchable API page) and warns about a request without details. The wiki's For Tools page is made from the same files.
+
 ## Releasing
 
 Put the version in `src/CrewTools/Plugin.cs` (`Version = "x.y.z"`), add its section to `CHANGELOG.md`, commit and

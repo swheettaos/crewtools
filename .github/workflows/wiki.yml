@@ -4,7 +4,7 @@ name: wiki
 on:
   push:
     branches: [main]
-    paths: [wiki/**, CHANGELOG.md, src/CrewTools/Http.cs, tools/wiki.py, .github/workflows/wiki.yml]
+    paths: [wiki/**, CHANGELOG.md, src/CrewTools/Http.cs, docs/endpoints.toml, tools/api.py, tools/wiki.py, .github/workflows/wiki.yml]
   workflow_dispatch:
 permissions:
   contents: write

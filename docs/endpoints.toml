@@ -1,0 +1,125 @@
+# Details for every /crew/ request: what it does, what it's for, its parameters, an example and an answer.
+# tools/api.py merges this with the requests in src/CrewTools/Http.cs (HttpHelp) and writes docs/api.html, the
+# searchable API page; tools/wiki.py writes the wiki's For Tools page from it. Example answers use made-up players.
+#
+# group: Players, In the game or Settings. params: [name, type, default, meaning]. errors and notes: Markdown.
+
+["/crew/players"]
+group = "Players"
+about = "Everyone Crew Tools knows: online or not, banned, trusted, their five switches, their base passes, and how much of the 30-minute spending cap they've spent and have left."
+use = "The roster behind any tool: a host dashboard, a script that finds who's close to the cap, or the `id` you need for every change."
+example = "GET /crew/players"
+answer = '''
+{"cap": 100000, "players": [{"id": "76561190000000001", "name": "Crewmate", "online": true, "trusted": false, "banned": false,
+  "switches": {"build": true, "demolish": false, "sell": true, "shop": true, "capsules": true},
+  "passes": ["North"], "spent": 12500, "left": 87500}]}
+'''
+notes = ["`id` is the player's Steam ID as text (it doesn't fit a JSON number).", "`left` is `null` for a trusted player: no cap."]
+
+["/crew/players/modify"]
+group = "Players"
+about = "Change a player, exactly as the Players tab's buttons do: their switches, trust, base passes, spending, or all switches off. Several changes can go in one request."
+use = "A moderation script (restrict someone the moment they're caught), giving a friend a pass for an event, or resetting a builder's cap after a big planned build."
+params = [
+  ["id", "Steam ID", "", "The player, as `/crew/players` lists them"],
+  ["build, demolish, sell, shop, capsules", "0|1", "", "Switch one permission off or on"],
+  ["trust", "0|1", "", "Trusted players have no spending cap"],
+  ["pass, passOn", "Base, 0|1", "passOn=1", "Let them work in a protected base (North, South, East or West), or take it back"],
+  ["resetSpending", "1", "", "Give them their full 30-minute cap again"],
+  ["restrict", "1", "", "Every switch off"],
+  ["defaults", "1", "", "Back to the new-player switches"],
+]
+example = "POST /crew/players/modify?id=76561190000000001&pass=South&passOn=1&trust=1"
+answer = '''
+{"ok": true, "done": ["trusted", "South pass given"],
+ "player": {"id": "76561190000000001", "name": "Crewmate", "online": true, "trusted": true, "banned": false,
+  "switches": {"build": true, "demolish": false, "sell": true, "shop": true, "capsules": true},
+  "passes": ["North", "South"], "spent": 12500, "left": null}}
+'''
+errors = ["`{\"ok\":false,\"reason\":\"id= is required\"}`", "`\"reason\": \"pass= is one of North, South, East, West\"`"]
+
+["/crew/players/remove"]
+group = "Players"
+about = "Kick a player (they can rejoin), or with `ban=1` ban them: everything they built is removed and refunded to the team, a piece at a time, and their vehicles refunded with every upgrade."
+use = "Acting on a catch from a tool, or a script that bans on a confirmed cheat."
+params = [
+  ["id", "Steam ID", "", "The player"],
+  ["ban", "1", "kick", "`1`: ban instead of kick"],
+]
+example = "POST /crew/players/remove?id=76561190000000002&ban=1"
+answer = '''
+{"ok": true, "done": "banned (what they built is being removed and refunded)"}
+'''
+errors = ["`\"reason\": \"only while you host a game\"`", "`\"reason\": \"<name> isn't in the game right now\"`"]
+
+["/crew/players/unban"]
+group = "Players"
+about = "Unban a player: they can join again."
+use = "Undoing a ban from a tool, for example after a false catch you've checked in the logs."
+params = [["id", "Steam ID", "", "The banned player"]]
+example = "POST /crew/players/unban?id=76561190000000002"
+answer = '''
+{"ok": true, "done": "unbanned: they can join again"}
+'''
+errors = ["`\"reason\": \"<name> isn't banned\"`"]
+
+["/crew/now"]
+group = "In the game"
+about = "Who's in the game right now, where they are, and the protected base they're standing in, if any."
+use = "A live overlay or map of your crew, or a script that reacts when someone walks into a base."
+example = "GET /crew/now"
+answer = '''
+{"hosting": true, "players": [{"id": "76561190000000001", "name": "Crewmate", "pos": [12.4, 1993.1, -5.2], "protectedBase": "South"}]}
+'''
+
+["/crew/catches"]
+group = "In the game"
+about = "Cheating popups waiting for your answer, building money held for a building that hasn't come yet, and the last lines of `CrewPermissions.cheats.log`."
+use = "A moderation tool: see catches without opening the game's window, and decide on them from a script or a phone."
+params = [["lines", "int", "40", "How many lines of the cheats log to include"]]
+example = "GET /crew/catches?lines=5"
+answer = '''
+{"popups": [{"id": "76561190000000002", "name": "Speedy", "what": "cheat watch: moved at 48 m/s on foot (most 30)", "count": 1, "decided": false}],
+ "held": [{"id": "76561190000000001", "name": "Crewmate", "dollars": 50}],
+ "log": ["... Speedy (76561190000000002): cheat watch: moved at 48 m/s on foot (most 30) ..."]}
+'''
+notes = ["`what` is the reason as the popup shows it: a money catch such as \"sent trick money of $5,000\", or a cheat watch catch starting \"cheat watch: \"."]
+
+["/crew/settings"]
+group = "Settings"
+about = "The protected bases and their sizes, the spending cap, the cleanup, the welcome message, the server name, and what new players start with."
+use = "Read the current rules before changing them, or show them on a dashboard."
+example = "GET /crew/settings"
+answer = '''
+{"zones": {"North": {"on": false, "metres": 150}, "South": {"on": true, "metres": 150}, "East": {"on": false, "metres": 150}, "West": {"on": false, "metres": 150}},
+ "cap": 100000, "cleanup": true, "cleanupMinutes": 30, "welcome": true, "welcomeText": "Welcome to {server}, @{name}!",
+ "name": "My Crew", "newPlayers": {"build": true, "demolish": false, "sell": true, "shop": true, "capsules": true}}
+'''
+
+["/crew/settings/modify"]
+group = "Settings"
+about = "Change a rule, as the Bases, Rules and Server tabs do. Several changes can go in one request."
+use = "Switching rules by time or event: open a base for a build party and protect it again after, raise the cap for a planned build, rename the server for the evening."
+params = [
+  ["zone, on", "Base, 0|1", "", "Protect a base (North, South, East or West), or open it"],
+  ["zone, metres", "Base, number", "", "Its radius round the station"],
+  ["cap", "number", "", "The spending cap per 30 minutes"],
+  ["name", "text", "", "Your server name"],
+  ["cleanup", "0|1", "", "The loose-capsule cleanup on or off"],
+  ["cleanupMinutes", "number", "", "How often it runs"],
+]
+example = "POST /crew/settings/modify?zone=North&on=1&metres=200"
+answer = '''
+{"ok": true, "done": ["North protected on", "North zone 200 m"]}
+'''
+errors = ["`\"reason\": \"zone= is one of North, South, East, West\"`"]
+
+["/crew/cleanup"]
+group = "Settings"
+about = "Start the loose-capsule cleanup in one minute; its warning goes to crew chat now."
+use = "Tidying the world before you save or before an event, without waiting for the timer."
+example = "POST /crew/cleanup"
+answer = '''
+{"ok": true, "done": "cleanup in 1 minute; the warning is in crew chat now"}
+'''
+errors = ["`\"reason\": \"the cleanup is off (settings: cleanup=1)\"`"]
