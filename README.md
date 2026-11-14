@@ -25,6 +25,7 @@ built for it:
 | **Your crew during an update** | Everyone leaves while you restart | Nobody notices: spending in the last 30 minutes, building money held, a ban reclaim in progress and unanswered cheating popups carry over to the new version |
 | **Turning it off** | Remove the DLL and restart | F9 → HOT PLUGINS → **Disable**: unloaded from memory at once; **Enable** brings it back |
 | **Scripts and tools** | - | HTTP requests under `/crew/` (players, catches, settings, kick, ban, cleanup), listed in LunarLink's `/help` |
+| **An AI assistant** | - | Through LunarLink's [MCP server](https://github.com/swheettaos/lunarlink/wiki/MCP), Crew Tools' requests become tools: ask Claude "who's online, and has anyone been caught?" |
 | **Seeing its state** | `BepInEx/LogOutput.log` | F9 shows it running, its build time, and any error |
 
 **To run it with LunarLink:** install [LunarLink](https://github.com/swheettaos/lunarlink/releases/latest), then put `CrewTools.dll` in **`BepInEx/hot/`**
