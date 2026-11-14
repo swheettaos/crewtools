@@ -6,6 +6,9 @@ host chores. **Only the host needs it**; crew-mates install nothing. A BepInEx 6
 
 [Download the latest release](https://github.com/swheettaos/crewtools/releases/latest)
 
+**Runs on its own.** **With [LunarLink](https://swheettaos.github.io/lunarlink/) it's hot-loadable and updates itself in place, with no restart:** your
+crew keeps playing while it updates. See [[With LunarLink]].
+
 ## Start here
 
 | If you want to | Read |
@@ -18,6 +21,7 @@ host chores. **Only the host needs it**; crew-mates install nothing. A BepInEx 6
 | Find your way around the window | [[The Crew Tools Window]] |
 | Change a limit or a default | [[Settings]] |
 | Keep it up to date | [[Updates]] |
+| Run it hot and update it without restarts | [[With LunarLink]] |
 | Fix something | [[Troubleshooting]] |
 | Read it from a script or a tool | [[For Tools]] |
 

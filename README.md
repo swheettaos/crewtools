@@ -3,9 +3,36 @@
 **Host tools for Moon Sweepers crew games:** what each crew-mate may do, where and how much, cheat catching, and the
 host chores. Only the host needs it; crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin.
 
+**Runs on its own** as a normal BepInEx plugin. **With [LunarLink](https://swheettaos.github.io/lunarlink/) it's hot-loadable and updates itself in place,
+with no restart:** see [On its own, or better with LunarLink](#on-its-own-or-better-with-lunarlink).
+
 [Download the latest release](https://github.com/swheettaos/crewtools/releases/latest) ·
 [Docs site](https://swheettaos.github.io/crewtools/) · [Wiki](https://github.com/swheettaos/crewtools/wiki) ·
 [Changelog](CHANGELOG.md) · [Report a problem](https://github.com/swheettaos/crewtools/issues/new/choose)
+
+## On its own, or better with LunarLink
+
+**Crew Tools runs on its own.** It's a normal BepInEx plugin: install it in `BepInEx/plugins/` and everything works.
+Nothing else is needed.
+
+**With [LunarLink](https://swheettaos.github.io/lunarlink/) it's hot-loadable and updates itself, in place, while the game runs.** LunarLink is a free
+BepInEx plugin ([GitHub](https://github.com/swheettaos/lunarlink)) that loads plugins from `BepInEx/hot/` and reloads them without a restart. Crew Tools is
+built for it:
+
+| | On its own | With LunarLink |
+|---|---|---|
+| **Updating** | Download the new zip, close the game, unzip, start again | F9 → UPDATES → **Update**: downloaded from this repo's releases, checked against GitHub's SHA-256 and reloaded in place, **no restart** |
+| **Your crew during an update** | Everyone leaves while you restart | Nobody notices: spending in the last 30 minutes, building money held, a ban reclaim in progress and unanswered cheating popups carry over to the new version |
+| **Turning it off** | Remove the DLL and restart | F9 → HOT PLUGINS → **Disable**: unloaded from memory at once; **Enable** brings it back |
+| **Scripts and tools** | - | HTTP requests under `/crew/` (players, catches, settings, kick, ban, cleanup), listed in LunarLink's `/help` |
+| **Seeing its state** | `BepInEx/LogOutput.log` | F9 shows it running, its build time, and any error |
+
+**To run it with LunarLink:** install [LunarLink](https://github.com/swheettaos/lunarlink/releases/latest), then put `CrewTools.dll` in **`BepInEx/hot/`**
+instead of `BepInEx/plugins/CrewTools/` (not in both: LunarLink refuses to load a second copy), start the game and turn
+it on in F9 → HOT PLUGINS. From then on, F9 → UPDATES keeps it up to date.
+
+More about LunarLink: [its site](https://swheettaos.github.io/lunarlink/) · [wiki](https://github.com/swheettaos/lunarlink/wiki) · [how updates work](https://github.com/swheettaos/lunarlink/wiki/Updates) ·
+[hot plugins](https://github.com/swheettaos/lunarlink/wiki/Hot-Plugins).
 
 ## Credits: built on Crew Permissions by tylerun
 
@@ -144,16 +171,17 @@ base passes), `CrewTools.owners.txt` (who built what). Logs in `BepInEx`: `CrewP
 
 ## For tools
 
-Crew Tools answers HTTP requests under `/crew/` when a mod that serves HTTP passes them on to plugins: its plugin class
+Crew Tools answers HTTP requests under `/crew/` when a mod that serves HTTP, such as [LunarLink](https://github.com/swheettaos/lunarlink), passes them on to plugins: its plugin class
 has a public `string HandleHttp(string method, string path, NameValueCollection query, string body)` and lists the
 requests in `string[] HttpHelp()`. Without such a mod nothing calls them. Read the players (switches, trust, passes,
 spending), who is in the game now, the catches and held money, and the settings; change a player, kick, ban or unban,
 change a setting, or start the cleanup. Each change does exactly what the CREW TOOLS window's button does.
 
-**Updates:** Crew Tools answers `string UpdateFeed()` with `github:swheettaos/crewtools`, so a mod that updates
-plugins can check its latest release here and install it (the zip, checked against the SHA-256 GitHub publishes).
+**Updates:** Crew Tools answers `string UpdateFeed()` with `github:swheettaos/crewtools`, so
+[LunarLink](https://github.com/swheettaos/lunarlink) (or any mod that updates plugins) can check its latest release here and install it (the zip, checked
+against the SHA-256 GitHub publishes), in place when it runs hot.
 
-It can also be reloaded in place by a mod loader that reloads plugins while the game runs: `Tools` (`Plugin.cs`) starts
+It can also be reloaded in place by a mod loader that reloads plugins while the game runs, such as [LunarLink](https://github.com/swheettaos/lunarlink): `Tools` (`Plugin.cs`) starts
 and stops as one piece and hands what is in flight (each crew-mate's spending in the last 30 minutes, building money
 held for its building, a ban reclaim in progress, cheating popups not answered yet) to its next start.
 

@@ -1,6 +1,10 @@
 # Installing
 
-Needs **BepInEx 6 (IL2CPP)**, as the game's other mods use. Only the host installs it.
+Needs **BepInEx 6 (IL2CPP)**, as the game's other mods use. Only the host installs it. Two ways:
+
+- **On its own** (below): a normal BepInEx plugin in `BepInEx/plugins/CrewTools/`.
+- **With [LunarLink](https://swheettaos.github.io/lunarlink/)**: in `BepInEx/hot/`, so it reloads and updates in place without restarts. See
+  [[With LunarLink]].
 
 1. Download `CrewTools-<version>.zip` from the [latest release](https://github.com/swheettaos/crewtools/releases/latest).
 2. Close the game and unzip it into the game folder, so you get `Moon Sweepers/BepInEx/plugins/CrewTools/CrewTools.dll`.

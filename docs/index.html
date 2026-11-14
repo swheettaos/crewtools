@@ -78,10 +78,11 @@
   </svg>
   <div class="wrap">
     <h1>Crew Tools</h1>
-    <p class="lead">Host tools for Moon Sweepers crew games: what each crew-mate may do, where and how much, cheat catching, and the host chores. Only the host installs it.</p>
+    <p class="lead">Host tools for Moon Sweepers crew games: what each crew-mate may do, where and how much, cheat catching, and the host chores. Runs on its own; with LunarLink it's hot-loadable and updates itself in place.</p>
     <div class="btns">
       <a class="btn main" href="https://github.com/swheettaos/crewtools/releases/latest">Download</a>
       <a class="btn" href="https://github.com/swheettaos/crewtools/wiki">Wiki</a>
+      <a class="btn" href="https://swheettaos.github.io/lunarlink/">With LunarLink</a>
       <a class="btn" href="https://github.com/swheettaos/crewtools">GitHub</a>
     </div>
   </div>
@@ -93,6 +94,7 @@
   <div class="key"><b>Only the host needs it</b>Crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin, one DLL.</div>
   <div class="key"><b>Nobody is banned by accident</b>Refused actions are refused quietly, and building money is checked against what was really built before anything is called cheating.</div>
   <div class="key"><b>Built on Crew Permissions</b>tylerun's permission switches and money anti-cheat, merged in with the author's permission and credited.</div>
+  <div class="key"><b>Better with LunarLink</b>Runs on its own, but with <a href="https://swheettaos.github.io/lunarlink/">LunarLink</a> it reloads and updates in place: no restart, and your crew never notices.</div>
 </section>
 
 <section>
@@ -104,7 +106,7 @@
     <div class="card"><span class="tag">Spending cap</span><h3>No draining the money</h3><p>At most $X per crew-mate in any 30 minutes, priced before the purchase goes through. Trusted players have no cap.</p></div>
     <div class="card"><span class="tag">Anti-cheat</span><h3>Money and cheat watch</h3><p>Building money must match what was really built; speed, flying, reach, deposits and teleports are watched. Ban, kick or ask you.</p></div>
     <div class="card"><span class="tag">Host chores</span><h3>The rest</h3><p>A welcome in crew chat, your server name, cleanup of loose capsules, and everything a banned player built removed and refunded.</p></div>
-    <div class="card"><span class="tag">Updates</span><h3>Updates itself</h3><p>It names its GitHub releases (<code>UpdateFeed()</code>), so a mod that updates plugins can install new versions, in place while the game runs when it runs hot.</p></div>
+    <div class="card"><span class="tag">Updates</span><h3>Updates itself</h3><p>It names its GitHub releases (<code>UpdateFeed()</code>), so <a href="https://swheettaos.github.io/lunarlink/">LunarLink</a> installs new versions from its F9 UPDATES tab, in place while the game runs.</p></div>
   </div>
 </section>
 
@@ -117,6 +119,21 @@
     <li><b>Start the game</b>The log says "Crew Tools x.y.z loaded: 30 game hooks in place". Open the pause menu on the Moon: CREW TOOLS.</li>
   </ol>
   <p style="margin-top:14px">Coming from Crew Permissions: nothing to do, the first start converts your players and settings. <a href="https://github.com/swheettaos/crewtools/wiki/Installing">More →</a></p>
+</section>
+
+<section>
+  <h2>On its own, or better with LunarLink</h2>
+  <p class="sub"><b>Crew Tools runs on its own</b>: a normal BepInEx plugin, nothing else needed. <b>With <a href="https://swheettaos.github.io/lunarlink/">LunarLink</a></b>, a free plugin that loads plugins from <code>BepInEx/hot/</code> and reloads them without a restart, it's hot-loadable and updates itself while you host.</p>
+  <div class="tablebox"><table>
+    <tr><th></th><th>On its own</th><th>With LunarLink</th></tr>
+    <tr><td><b>Updating</b></td><td>Download, close the game, unzip, start again</td><td>F9 → UPDATES → <b>Update</b>: downloaded, SHA-256 checked, reloaded in place. <b>No restart</b></td></tr>
+    <tr><td><b>Your crew during an update</b></td><td>Everyone leaves while you restart</td><td>Nobody notices: spending caps, held money, a ban reclaim and open popups carry over</td></tr>
+    <tr><td><b>Turning it off</b></td><td>Remove the DLL, restart</td><td>F9 → <b>Disable</b>: unloaded from memory at once</td></tr>
+    <tr><td><b>Scripts and tools</b></td><td>-</td><td>HTTP requests under <code>/crew/</code>: players, catches, settings, kick, ban, cleanup</td></tr>
+    <tr><td><b>Its state</b></td><td>The BepInEx log</td><td>F9 shows it running, its build and any error</td></tr>
+  </table></div>
+  <p style="margin-top:14px"><b>To run it with LunarLink:</b> install <a href="https://github.com/swheettaos/lunarlink/releases/latest">LunarLink</a>, put <code>CrewTools.dll</code> in <code>BepInEx/hot/</code> instead of <code>BepInEx/plugins/CrewTools/</code> (not both), start the game and turn it on in F9 → HOT PLUGINS.</p>
+  <p><a href="https://swheettaos.github.io/lunarlink/">LunarLink's site →</a> &nbsp; <a href="https://github.com/swheettaos/lunarlink/wiki">Its wiki →</a> &nbsp; <a href="https://github.com/swheettaos/lunarlink/wiki/Updates">How updates work →</a></p>
 </section>
 
 <section>
@@ -142,6 +159,7 @@ flowchart LR
   <div class="cards">
     <a class="card" href="https://github.com/swheettaos/crewtools/wiki"><h3>The wiki</h3><p>Every feature, the window, the settings, troubleshooting.</p></a>
     <a class="card" href="https://github.com/swheettaos/crewtools/blob/main/CHANGELOG.md"><h3>Changelog</h3><p>What changed in each version.</p></a>
+    <a class="card" href="https://swheettaos.github.io/lunarlink/"><h3>LunarLink</h3><p>Run Crew Tools hot: reload and update it in place, no restart.</p></a>
     <a class="card" href="https://www.nexusmods.com/moonsweepers/mods/71"><h3>Crew Permissions</h3><p>tylerun's mod that Crew Tools' permissions and money checks come from.</p></a>
     <a class="card" href="https://github.com/swheettaos/crewtools/issues/new/choose"><h3>Report a problem</h3><p>Bug reports, feature requests and questions.</p></a>
   </div>
