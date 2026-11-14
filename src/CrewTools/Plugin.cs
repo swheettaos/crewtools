@@ -45,6 +45,12 @@ public sealed class Plugin : BasePlugin
         Running = new Tools(); Running.Start(null);
         AddComponent<Driver>();
     }
+
+    // The same for the BepInEx build: a mod that passes HTTP requests on, or updates plugins, finds these on the
+    // BepInPlugin class
+    public string HandleHttp(string method, string path, System.Collections.Specialized.NameValueCollection query, string body) => Running?.HandleHttp(method, path, query, body);
+    public string[] HttpHelp() => Running?.HttpHelp();
+    public string UpdateFeed() => Tools.Feed;
 }
 
 // Everything Crew Tools does, started and stopped as a whole. BepInEx starts it through Plugin; a loader that reloads
@@ -54,7 +60,7 @@ public sealed class Plugin : BasePlugin
 // building money held for its building, a ban reclaim's queue, cheating popups not yet answered.
 public sealed class Tools
 {
-    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.1";
+    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.2";
     internal static ConfigFile Config;                                    // set by Plugin; otherwise opened here
     internal static BepInEx.Logging.ManualLogSource Log;
     BepInEx.Logging.ManualLogSource ownLog;
@@ -140,6 +146,11 @@ public sealed class Tools
     // HTTP requests a host passes on to plugins (Http.cs): /crew/... answered, anything else is not ours (null)
     public string HandleHttp(string method, string path, System.Collections.Specialized.NameValueCollection query, string body) => Http.Handle(method, path, query);
     public string[] HttpHelp() => Http.Help;
+
+    // Where Crew Tools' releases are, for a mod that updates plugins (it asks UpdateFeed()): the latest GitHub release's
+    // zip, checked against the SHA-256 GitHub publishes.
+    internal const string Feed = "github:swheettaos/crewtools";
+    public string UpdateFeed() => Feed;
 }
 
 // The BepInEx build's frame driver: calls Tools every frame. (A loader that drives Tools itself doesn't use it.)

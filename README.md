@@ -47,7 +47,7 @@ Needs **BepInEx 6 (IL2CPP)**, as the game's other mods use.
 1. Download `CrewTools-<version>.zip` from the [latest release](https://github.com/swheettaos/crewtools/releases/latest).
 2. Close the game and unzip it into the game folder, so you get `Moon Sweepers/BepInEx/plugins/CrewTools/CrewTools.dll`.
 3. **Remove** the separate `CrewPermissions.dll` from `BepInEx/plugins` if you have it: Crew Tools includes it.
-4. Start the game. The log says "Crew Tools 1.2.1 loaded: 30 game hooks in place".
+4. Start the game. The log says "Crew Tools 1.2.2 loaded: 30 game hooks in place".
 
 **Coming from Crew Permissions** (or an earlier Crew Tools test build): nothing to do; the first start converts
 everything and loses nothing.
@@ -148,6 +148,9 @@ has a public `string HandleHttp(string method, string path, NameValueCollection 
 requests in `string[] HttpHelp()`. Without such a mod nothing calls them. Read the players (switches, trust, passes,
 spending), who is in the game now, the catches and held money, and the settings; change a player, kick, ban or unban,
 change a setting, or start the cleanup. Each change does exactly what the CREW TOOLS window's button does.
+
+**Updates:** Crew Tools answers `string UpdateFeed()` with `github:swheettaos/crewtools`, so a mod that updates
+plugins can check its latest release here and install it (the zip, checked against the SHA-256 GitHub publishes).
 
 It can also be reloaded in place by a mod loader that reloads plugins while the game runs: `Tools` (`Plugin.cs`) starts
 and stops as one piece and hands what is in flight (each crew-mate's spending in the last 30 minutes, building money

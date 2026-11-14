@@ -2,6 +2,13 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## 1.2.2
+
+- **Updates itself** through a mod that updates plugins: Crew Tools answers `UpdateFeed()` with its GitHub releases, so
+  such a mod can offer the newest version and install it (in place, without a restart, when it runs hot).
+- The HTTP requests answer in the normal BepInEx build too (its plugin class passes them on); before, only a hot copy
+  answered them.
+
 ## 1.2.1
 
 - The HTTP requests describe themselves (a public `HttpHelp` method lists them), so a host can show them.
