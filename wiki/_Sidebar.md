@@ -13,7 +13,7 @@
 - [[Troubleshooting]]
 
 **More**
-- [[For Tools]]
+- [[API (For Tools)|For Tools]]
 - [[Credits]]
 - [[Contributing]]
 - [[Changelog]]
