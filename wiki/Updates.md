@@ -10,7 +10,8 @@ row. Crew Tools names its releases with a public method LunarLink asks:
 public string UpdateFeed() => "github:swheettaos/crewtools";
 ```
 
-LunarLink checks this repo's latest release when you ask, compares the version with yours, and installs the zip after
+LunarLink checks this repo's latest release when you ask (or once at every game start, if you tick that on its
+UPDATES tab), compares the version with yours, and installs the zip after
 checking it against the SHA-256 GitHub publishes. Running hot (from `BepInEx/hot/`), the new version reloads in place:
 **no restart**, and what's in flight (each crew-mate's spending in the last 30 minutes, building money held, a ban
 reclaim, unanswered popups) is handed to the new copy. Installed the normal way, in `BepInEx/plugins/`, it needs a
