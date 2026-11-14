@@ -2,6 +2,12 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## Unreleased
+
+- **A cleaner window**, in the style of Quantum Conveyors' menus: rounded panels, rows, buttons and fields; a soft
+  gradient on each row (warm for players in the game now); a centred title; and a "?" in the header whose tooltip
+  says what each tab is for.
+
 ## 1.2.2
 
 - **Updates itself** through a mod that updates plugins: Crew Tools answers `UpdateFeed()` with its GitHub releases, so

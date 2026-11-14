@@ -41,6 +41,7 @@ internal static class Ui
             var ms = Mouse.current;                                                  // the mouse wheel scrolls the players list
             if (ms != null && popup == null && tabNow == "Players") { float sy = ms.scroll.ReadValue().y; if (sy > 0.01f) ScrollPlayers(-1); else if (sy < -0.01f) ScrollPlayers(1); }
             Click(panelRay, popup);
+            Tooltips();
         }
         else if (buttonLayer != null) Click(btnRay);
     }
@@ -72,7 +73,7 @@ internal static class Ui
     static int visibleRows = 9; static HashSet<ulong> onlineIds = new();
     const float W = 920f;                                                 // row width; window is 980
 
-    static RectTransform RowBox(Transform p, float y, float h = 56f) => Rect("Row", p, new Vector2(W, h), new Vector2(0, y), Row);
+    static RectTransform RowBox(Transform p, float y, float h = 56f) { var r = Rect("Row", p, new Vector2(W, h), new Vector2(0, y), Row); Shade(r, false); return r; }
     static Text RowTitle(RectTransform row, string title, float w = 460f) =>
         Label(row, title, new Vector2(-W / 2 + 18 + w / 2, 0), new Vector2(w, 52), 19, Cream, TextAnchor.MiddleLeft);
     // an ON / OFF switch ending at xRight
@@ -115,8 +116,16 @@ internal static class Ui
         refreshers.Clear(); tabs.Clear(); playerSlots.Clear();
         panel = Layer("Crew Tools", 31001, out panelRay);
         var win = Rect("Window", panel.transform, new Vector2(980, 900), Vector2.zero, Panel);
-        Label(win, "CREW TOOLS", new Vector2(-W / 2 + 160, 405), new Vector2(320, 56), 34, Ink, TextAnchor.MiddleLeft);
+        Label(win, "Crew Tools", new Vector2(0, 405), new Vector2(400, 56), 32, Ink, TextAnchor.MiddleCenter);
         Button(win, "×", new Vector2(450, 410), new Vector2(50, 50), ClosePanel);
+        Help(win, new Vector2(125, 405),
+            "Crew Tools runs your crew game: what each crew-mate may do, where and how much.\n\n" +
+            "Players: each one's five switches (orange = ON), base passes, and Manage (spending, trust, kick, ban).\n" +
+            "Bases: protect a base so crew-mates near it can look but not touch.\n" +
+            "Rules: the spending cap, the cleanup, and what new players start with.\n" +
+            "Anti-cheat: what happens to a cheater, and the cheat watch.\n" +
+            "Server: your server name and the welcome message.",
+            new Vector2(640, 250), new Vector2(0, 230));
         string[] names = { "Players", "Bases", "Rules", "Anti-cheat", "Server" };
         for (int i = 0; i < names.Length; i++)
         {
@@ -162,7 +171,7 @@ internal static class Ui
         for (int k = 0; k < visibleRows; k++)
         {
             int slot = k; float y = 236 - k * 54;
-            var row = Rect("Player", c, new Vector2(W, 48), new Vector2(0, y), Row);
+            var row = Rect("Player", c, new Vector2(W, 48), new Vector2(0, y), Row); Shade(row, false);
             var t = Label(row, "", new Vector2(-W / 2 + 18 + 150, 0), new Vector2(300, 46), 15, Cream, TextAnchor.MiddleLeft);
             var perms = new List<(Node, Image, Text)>();
             for (int q = 0; q < PermNodes.Length; q++)
@@ -300,6 +309,7 @@ internal static class Ui
             if (row != null) row.gameObject.SetActive(has);
             if (!has) continue;
             ulong id = playerOrder[idx];
+            if (row != null) Shade(row.transform, onlineIds.Contains(id));          // warm: in the game now
             if (basesText != null) { int np = Players.PassCount(id); basesText.text = np == 0 ? "none" : $"{np} base{(np == 1 ? "" : "s")}"; }
             string name = Players.Name(id);
             label.text = name + "\n" + (Players.Trusted(id) ? "trusted: no limit" : $"spent ${Spending.Used(id):N0} of ${Plugin.Cap.Value:N0}");
