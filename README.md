@@ -77,7 +77,7 @@ Needs **BepInEx 6 (IL2CPP)**, as the game's other mods use.
 1. Download `CrewTools-<version>.zip` from the [latest release](https://github.com/swheettaos/crewtools/releases/latest).
 2. Close the game and unzip it into the game folder, so you get `Moon Sweepers/BepInEx/plugins/CrewTools/CrewTools.dll`.
 3. **Remove** the separate `CrewPermissions.dll` from `BepInEx/plugins` if you have it: Crew Tools includes it.
-4. Start the game. The log says "Crew Tools 1.2.2 loaded: 30 game hooks in place".
+4. Start the game. The log says "Crew Tools 1.2.3 loaded: 30 game hooks in place".
 
 **Coming from Crew Permissions** (or an earlier Crew Tools test build): nothing to do; the first start converts
 everything and loses nothing.

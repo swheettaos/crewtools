@@ -60,7 +60,7 @@ public sealed class Plugin : BasePlugin
 // building money held for its building, a ban reclaim's queue, cheating popups not yet answered.
 public sealed class Tools
 {
-    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.2";
+    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.3";
     internal static ConfigFile Config;                                    // set by Plugin; otherwise opened here
     internal static BepInEx.Logging.ManualLogSource Log;
     BepInEx.Logging.ManualLogSource ownLog;
