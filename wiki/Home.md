@@ -1,5 +1,7 @@
 # Crew Tools
 
+> **LunarLink compatible.** Crew Tools runs on its own, and with [LunarLink](https://swheettaos.github.io/lunarlink/) it runs hot: reload it, turn it off (unloaded from memory) and update it from the game's F9 window, with no restart. See [[With LunarLink]].
+
 Host tools for **Moon Sweepers** crew games: what each crew-mate may do, where and how much, cheat catching, and the
 host chores. **Only the host needs it**; crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin, built on
 [[Crew Permissions by tylerun|Credits]].
