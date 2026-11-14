@@ -4,6 +4,7 @@
 host chores. Only the host needs it; crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin.
 
 [Download the latest release](https://github.com/swheettaos/crewtools/releases/latest) ·
+[Docs site](https://swheettaos.github.io/crewtools/) · [Wiki](https://github.com/swheettaos/crewtools/wiki) ·
 [Changelog](CHANGELOG.md) · [Report a problem](https://github.com/swheettaos/crewtools/issues/new/choose)
 
 ## Credits: built on Crew Permissions by tylerun
@@ -177,6 +178,9 @@ Needs the .NET 8 SDK and the game with BepInEx 6 (IL2CPP); the project reference
 
 `MOON_GAME_DIR` sets the game's folder (default: Steam's on Linux). GitHub builds every push to `main` against a
 private copy of the game's DLLs; on a fork that build is skipped, so build locally against your own game.
+
+The [wiki](https://github.com/swheettaos/crewtools/wiki) is built from `wiki/` by `tools/wiki.py` on every push, and the
+[docs site](https://swheettaos.github.io/crewtools/) is `docs/`.
 
 **Releasing:** put the version in `src/CrewTools/Plugin.cs` (`Version = "x.y.z"`), add its section to `CHANGELOG.md`,
 commit and push, then `tools/release.sh x.y.z`: it checks those, tags `vx.y.z` and pushes the tag, and GitHub builds

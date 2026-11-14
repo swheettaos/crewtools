@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crew Tools</title>
+<meta name="description" content="Host tools for Moon Sweepers crew games: permissions, protected bases, a spending cap, anti-cheat and the host chores.">
+<style>
+  :root { --bg: #f6f5f1; --panel: #ffffff; --ink: #1c2230; --dim: #6b6a66; --line: #e2e0da; --accent: #12867a;
+          --accent-soft: #dcf2ef; --get: #2f7d4a; --post: #b4531a; --code: #f0eee8; --hero1: #1c2230; --hero2: #2b3242; }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #15171c; --panel: #1e2128; --ink: #ece9e2; --dim: #9a978f; --line: #2c3039; --accent: #3ccbb5;
+            --accent-soft: #173431; --get: #6fcf8e; --post: #ffa25e; --code: #191b21; --hero1: #0f1115; --hero2: #1b1f27; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  a { color: var(--accent); }
+  code, pre { font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; }
+  code { background: var(--code); padding: 1px 5px; border-radius: 4px; }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 16px; }
+
+  header.hero { background: linear-gradient(160deg, var(--hero1), var(--hero2)); color: #ece9e2; position: relative; overflow: hidden; }
+  .hero .wrap { padding-top: 56px; padding-bottom: 64px; position: relative; z-index: 1; }
+  .hero svg.badge { position: absolute; right: -60px; top: -40px; width: 360px; height: 360px; opacity: .9; z-index: 0; }
+  .hero h1 { font-size: clamp(36px, 7vw, 56px); margin: 0 0 8px; letter-spacing: -0.02em; }
+  .hero p.lead { font-size: clamp(17px, 2.4vw, 21px); max-width: 620px; margin: 0 0 28px; color: #c9c5bc; }
+  .btns { display: flex; flex-wrap: wrap; gap: 10px; }
+  .btn { display: inline-block; padding: 10px 18px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 15px;
+         border: 1px solid #ffffff33; color: #ece9e2; }
+  .btn.main { background: #3ccbb5; border-color: #3ccbb5; color: #08201d; }
+  .btn:hover { filter: brightness(1.1); }
+
+  section { padding: 48px 0 8px; }
+  section.keys { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; padding-top: 28px; }
+  .key { border-left: 3px solid var(--accent); background: var(--panel); border-radius: 0 10px 10px 0; padding: 12px 14px; color: var(--dim); font-size: 15px; min-width: 0; }
+  .key b { display: block; color: var(--ink); font-size: 16px; margin-bottom: 4px; }
+  h2 { font-size: 26px; margin: 0 0 6px; letter-spacing: -0.01em; }
+  .sub { color: var(--dim); margin: 0 0 22px; max-width: 720px; }
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 18px 16px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--dim); font-size: 15px; }
+  .card .tag { display: inline-block; font: 600 11px ui-monospace, monospace; letter-spacing: .04em; text-transform: uppercase;
+               color: var(--accent); background: var(--accent-soft); border-radius: 4px; padding: 2px 6px; margin-bottom: 10px; }
+  a.card { text-decoration: none; color: inherit; transition: border-color .15s; }
+  a.card:hover { border-color: var(--accent); }
+
+  .diagram { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; overflow-x: auto; }
+  .diagram pre.mermaid { margin: 0; background: none; text-align: center; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .two > *, .cards > * { min-width: 0; }
+  @media (max-width: 760px) { .two { grid-template-columns: 1fr; } .hero svg.badge { width: 220px; height: 220px; right: -70px; top: -50px; opacity: .5; } }
+
+  ol.steps { list-style: none; counter-reset: s; padding: 0; margin: 0; display: grid; gap: 12px; }
+  ol.steps li { min-width: 0; counter-increment: s; background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px 14px 58px; position: relative; }
+  ol.steps li::before { content: counter(s); position: absolute; left: 16px; top: 13px; width: 28px; height: 28px; border-radius: 50%;
+                        background: var(--accent); color: #fff; font-weight: 700; display: grid; place-items: center; font-size: 14px; }
+  ol.steps b { display: block; margin-bottom: 2px; }
+  pre.code { background: var(--code); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; overflow-x: auto; margin: 8px 0 0; }
+  .m { font: 700 12px ui-monospace, monospace; }
+  .m.get { color: var(--get); } .m.post { color: var(--post); }
+
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  td, th { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { color: var(--dim); font-weight: 600; font-size: 13px; }
+  .tablebox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow-x: auto; }
+
+  footer { margin-top: 56px; border-top: 1px solid var(--line); padding: 22px 0 40px; color: var(--dim); font-size: 14px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <svg class="badge moon" viewBox="0 0 200 200" aria-hidden="true">
+    <path d="M100 18 L168 44 V98 C168 140 138 170 100 184 C62 170 32 140 32 98 V44 Z" fill="#3ccbb5" opacity=".18" stroke="#3ccbb5" stroke-width="3"/>
+    <path d="M70 102 L92 124 L134 80" fill="none" stroke="#3ccbb5" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>
+  </svg>
+  <div class="wrap">
+    <h1>Crew Tools</h1>
+    <p class="lead">Host tools for Moon Sweepers crew games: what each crew-mate may do, where and how much, cheat catching, and the host chores. Only the host installs it.</p>
+    <div class="btns">
+      <a class="btn main" href="https://github.com/swheettaos/crewtools/releases/latest">Download</a>
+      <a class="btn" href="https://github.com/swheettaos/crewtools/wiki">Wiki</a>
+      <a class="btn" href="https://github.com/swheettaos/crewtools">GitHub</a>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section class="keys">
+  <div class="key"><b>Only the host needs it</b>Crew-mates install nothing. A BepInEx 6 (IL2CPP) plugin, one DLL.</div>
+  <div class="key"><b>Nobody is banned by accident</b>Refused actions are refused quietly, and building money is checked against what was really built before anything is called cheating.</div>
+  <div class="key"><b>Built on Crew Permissions</b>tylerun's permission switches and money anti-cheat, merged in with the author's permission and credited.</div>
+</section>
+
+<section>
+  <h2>What it does</h2>
+  <p class="sub">Everything from one window in the pause menu: CREW TOOLS.</p>
+  <div class="cards">
+    <div class="card"><span class="tag">Permissions</span><h3>Per player</h3><p>Build, Demolish, Sell, Shop, Capsules: each on or off, with defaults for new players and a reset.</p></div>
+    <div class="card"><span class="tag">Protected bases</span><h3>Look, don't touch</h3><p>Near a protected base crew-mates can look and drive, but not build, demolish, sell, shop or handle capsules. Passes per player.</p></div>
+    <div class="card"><span class="tag">Spending cap</span><h3>No draining the money</h3><p>At most $X per crew-mate in any 30 minutes, priced before the purchase goes through. Trusted players have no cap.</p></div>
+    <div class="card"><span class="tag">Anti-cheat</span><h3>Money and cheat watch</h3><p>Building money must match what was really built; speed, flying, reach, deposits and teleports are watched. Ban, kick or ask you.</p></div>
+    <div class="card"><span class="tag">Host chores</span><h3>The rest</h3><p>A welcome in crew chat, your server name, cleanup of loose capsules, and everything a banned player built removed and refunded.</p></div>
+    <div class="card"><span class="tag">Updates</span><h3>Updates itself</h3><p>It names its GitHub releases (<code>UpdateFeed()</code>), so a mod that updates plugins can install new versions, in place while the game runs when it runs hot.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Install</h2>
+  <p class="sub">You need BepInEx 6 (IL2CPP), as the game's other mods use.</p>
+  <ol class="steps">
+    <li><b>Download the zip</b>From the <a href="https://github.com/swheettaos/crewtools/releases/latest">latest release</a>.</li>
+    <li><b>Unzip it into the game folder, with the game closed</b>You get <code>BepInEx/plugins/CrewTools/CrewTools.dll</code>. Remove a separate <code>CrewPermissions.dll</code> if you have one: Crew Tools includes it.</li>
+    <li><b>Start the game</b>The log says "Crew Tools x.y.z loaded: 30 game hooks in place". Open the pause menu on the Moon: CREW TOOLS.</li>
+  </ol>
+  <p style="margin-top:14px">Coming from Crew Permissions: nothing to do, the first start converts your players and settings. <a href="https://github.com/swheettaos/crewtools/wiki/Installing">More →</a></p>
+</section>
+
+<section>
+  <h2>How a crew-mate's action is judged</h2>
+  <p class="sub">Every building, shop or capsule message a crew-mate's game sends goes through the same checks on your side.</p>
+  <div class="diagram"><pre class="mermaid">
+flowchart LR
+  msg["A crew-mate's message<br/>(build, demolish, sell, shop, capsule)"] --> sw{"Their switch<br/>for it on?"}
+  sw -- "no" --> no["Refused quietly<br/>(a sale's capsule given back)"]
+  sw -- "yes" --> zone{"Inside a protected base<br/>without a pass?"}
+  zone -- "yes" --> no
+  zone -- "no" --> cap{"Over their<br/>30-minute cap?"}
+  cap -- "yes" --> no
+  cap -- "no" --> ok["Allowed"]
+  ok --> money{"Its money matches<br/>what was built?"}
+  money -- "yes" --> paid["Paid"]
+  money -- "no" --> caught["Not paid; flagged,<br/>or a catch: ban / kick / ask you"]
+</pre></div>
+</section>
+
+<section>
+  <h2>Read more</h2>
+  <div class="cards">
+    <a class="card" href="https://github.com/swheettaos/crewtools/wiki"><h3>The wiki</h3><p>Every feature, the window, the settings, troubleshooting.</p></a>
+    <a class="card" href="https://github.com/swheettaos/crewtools/blob/main/CHANGELOG.md"><h3>Changelog</h3><p>What changed in each version.</p></a>
+    <a class="card" href="https://www.nexusmods.com/moonsweepers/mods/71"><h3>Crew Permissions</h3><p>tylerun's mod that Crew Tools' permissions and money checks come from.</p></a>
+    <a class="card" href="https://github.com/swheettaos/crewtools/issues/new/choose"><h3>Report a problem</h3><p>Bug reports, feature requests and questions.</p></a>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <span>Crew Tools is licensed under the <a href="https://github.com/swheettaos/crewtools/blob/main/LICENSE">GPL-3.0</a>; the parts from Crew Permissions are tylerun's, used with permission.</span>
+  <a href="https://github.com/swheettaos/crewtools">Source</a>
+</div></footer>
+
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+  const dark = matchMedia("(prefers-color-scheme: dark)").matches;
+  mermaid.initialize({ startOnLoad: true, theme: dark ? "dark" : "neutral", fontFamily: "system-ui, sans-serif" });
+</script>
+</body>
+</html>
