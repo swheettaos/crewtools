@@ -1,0 +1,11 @@
+name: Question
+description: How do I ... ? Something the README doesn't answer
+title: "[Question] "
+labels: [question]
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true

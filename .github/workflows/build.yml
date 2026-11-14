@@ -1,0 +1,51 @@
+name: build
+# Builds Crew Tools on GitHub's runners against a private copy of the game's DLLs (the game's interop assemblies and
+# BepInEx 6.0.0-be.791; tools/refs.sh refreshes them). A fork or a pull request from one has no key to that repo, so the
+# build is skipped there: build locally with ./build.sh against your own game.
+# A version tag (v1.2.1) also publishes the release: the zip, with that version's CHANGELOG.md section as its notes.
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths: [src/**, build.sh, CHANGELOG.md, .github/workflows/build.yml]
+  workflow_dispatch:
+permissions:
+  contents: write          # the release
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      REFS_KEY: ${{ secrets.REFS_DEPLOY_KEY }}
+      REFS_REPO: ${{ vars.REFS_REPO || 'swheettaos/moonsweepers-refs' }}
+    steps:
+      - name: No build references here
+        if: env.REFS_KEY == ''
+        run: echo "::notice::The build references are private, so this build is skipped. Build locally with ./build.sh against your own game."
+      - uses: actions/checkout@v7
+        if: env.REFS_KEY != ''
+      - name: Check out the build references (private)
+        if: env.REFS_KEY != ''
+        uses: actions/checkout@v7
+        with:
+          repository: ${{ env.REFS_REPO }}
+          ssh-key: ${{ secrets.REFS_DEPLOY_KEY }}
+          path: refs
+      - uses: actions/setup-dotnet@v6
+        if: env.REFS_KEY != ''
+        with:
+          dotnet-version: 8.0.x
+      - name: Build
+        if: env.REFS_KEY != ''
+        run: MOON_GAME_DIR="$GITHUB_WORKSPACE/refs" ./build.sh
+      - name: Keep the build
+        if: env.REFS_KEY != ''
+        uses: actions/upload-artifact@v7
+        with:
+          name: crewtools-${{ github.sha }}
+          path: src/CrewTools/bin/Release/net6.0/CrewTools.dll
+          if-no-files-found: error
+      - name: Publish the release
+        if: env.REFS_KEY != '' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: tools/package.sh "${GITHUB_REF_NAME#v}" --publish

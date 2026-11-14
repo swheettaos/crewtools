@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: README
+    url: https://github.com/swheettaos/crewtools#readme
+    about: Install, what it does, the window, settings
+  - name: Crew Permissions by tylerun
+    url: https://www.nexusmods.com/moonsweepers/mods/71
+    about: The mod Crew Tools' permissions and money anti-cheat come from

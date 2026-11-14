@@ -1,0 +1,55 @@
+name: Bug report
+description: Something doesn't work as it should - a permission, a protected base, the anti-cheat, the window, a crash
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you or a crew-mate did, what you expected, and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How to make it happen
+      description: The steps, if you know them.
+  - type: dropdown
+    id: part
+    attributes:
+      label: Which part
+      options:
+        - Permissions (build, demolish, sell, shop, capsules)
+        - Protected bases
+        - Spending cap
+        - Money anti-cheat (a ban or flag that looks wrong)
+        - Cheat watch
+        - The CREW TOOLS window
+        - Welcome, server name or cleanup
+        - Vehicles or ban reclaim
+        - The game crashed or froze
+        - Something else
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        The lines around the problem from `BepInEx/LogOutput.log`. For a ban or flag, the matching lines of
+        `BepInEx/CrewPermissions.cheats.log` and `CrewPermissions.money.log`; with `[Debug] Trace` on, the end of
+        `BepInEx/CrewTools.trace.log`. Remove Steam IDs or names you'd rather not share.
+      render: text
+  - type: input
+    id: versions
+    attributes:
+      label: Versions
+      description: Crew Tools (the log says "Crew Tools x.y.z loaded"), BepInEx, and the game.
+    validations:
+      required: true
+  - type: textarea
+    id: mods
+    attributes:
+      label: Other mods
+      description: The other plugins in BepInEx/plugins.
