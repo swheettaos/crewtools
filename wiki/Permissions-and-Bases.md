@@ -23,7 +23,9 @@ From 1.0.6 the game has its own per-player limits, **Build**, **Drive** and **Sp
 | (none) | Drive: set it in the game's crew menu |
 
 Either side can change them: switch Build or Shop in Crew Tools and the game's limit follows; change Build or Spend in
-the game's crew menu and the Crew Tools switch follows. The game keeps its limits per save slot
+the game's crew menu and the Crew Tools switch follows. A player joining a public crew gets the game's own default
+there (no building or spending) only for a moment: Crew Tools sets them to their switches within a second, so a new
+player gets your new-player switches (Rules tab) and a returning one keeps their own. The game keeps its limits per save slot
 (`crew_limits.json`). On 1.0.5 the game has none and Crew Tools works as before.
 
 ## Protected bases

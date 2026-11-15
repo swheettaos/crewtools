@@ -58,20 +58,25 @@ internal static class GameLimits
     // Players.Save: a switch may have changed, so look again at the next update
     internal static void Changed() => dirty = true;
 
-    // Once a second while something changed (and only while hosting, like all of Crew Tools): every known player's game
-    // limits set from their switches, saved and sent to the crew.
+    // Once a second (and only while hosting, like all of Crew Tools): game limits set from Crew Tools' switches - every
+    // known player's after a switch changed, and the crew-mates in the game always. The game gives a player it hasn't
+    // seen in a public crew its own default when they join (MoonCrewLimits.Welcome: no building or spending); Crew Tools'
+    // switches win over that, so a new player gets the new-player switches set on the Rules tab, and a player Crew Tools
+    // already knows keeps their own.
     internal static void Update()
     {
-        if (!Present || !dirty || Time.unscaledTime < nextLook) return;
+        if (!Present || Time.unscaledTime < nextLook) return;
         nextLook = Time.unscaledTime + 1f;
-        dirty = false;
-        foreach (var p in Players.All)
-        {
-            int now = Off(p.Id);
-            if (now < 0) continue;
-            int want = (now & ~(Build | Spend)) | (Players.Switch(p, Node.Build) ? 0 : Build) | (Players.Switch(p, Node.Shop) ? 0 : Spend);
-            if (want != now) Apply(p, want);
-        }
+        if (dirty) { dirty = false; foreach (var p in Players.All) Match(p); }
+        else foreach (var (id, _) in Crew.Now) Match(Players.Get(id));
+    }
+
+    static void Match(Players.Player p)
+    {
+        int now = Off(p.Id);
+        if (now < 0) return;
+        int want = (now & ~(Build | Spend)) | (Players.Switch(p, Node.Build) ? 0 : Build) | (Players.Switch(p, Node.Shop) ? 0 : Spend);
+        if (want != now) Apply(p, want);
     }
 
     // the player's game limits as the host saved them; -1 if they couldn't be read

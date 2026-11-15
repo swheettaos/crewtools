@@ -2,6 +2,13 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## Unreleased
+
+- **The game's crew limits follow your new-player switches, public crews too.** 1.0.6 gives a player it hasn't seen in a
+  public crew no building or spending when they join. Crew Tools now sets every crew-mate in the game to their Crew
+  Tools switches each second, so a new player gets the new-player switches from the Rules tab and a player Crew Tools
+  already knows keeps their own. Before, only a switch changed in Crew Tools reached the game.
+
 ## 1.2.7
 
 1.2.6 came out just before this, so both are here.
