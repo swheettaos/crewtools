@@ -2,6 +2,17 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## 1.2.6
+
+- **Works with Moon Sweepers 1.0.5 and the 1.0.6 preview.** 1.0.6 gives the game its own crew limits, Build, Drive
+  and Spend, set per player in its crew menu (hold Tab, then right-click a crew-mate's row). Crew Tools keeps them the
+  same as its switches: its Build switch sets the game's Build limit, its Shop switch the game's Spend limit, so the
+  game's crew menu, each crew-mate's own game and Crew Tools always agree. Changing Build or Spend in the game's crew
+  menu switches the matching Crew Tools switch too. Drive is left to the game's crew menu. On 1.0.5 nothing changes.
+- **Crew Tools still does much more than the game's limits:** separate Demolish, Sell and Capsules switches, limits for
+  players who are offline, protected bases with passes, a spending cap, the money anti-cheat, ban reclaim with refunds,
+  vehicles kept for players who leave, the capsule cleanup, a welcome message and your saved server name.
+
 ## 1.2.5
 
 - **Fixed: the host crashed when a crew-mate's dust sale was refused** (no Sell permission, or a protected base). The

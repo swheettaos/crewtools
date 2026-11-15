@@ -240,6 +240,7 @@ internal static class Players
                 lines.Add($"{p.Id} | {Clean(p.Name)} | {on} | {string.Join(" ", flags)} | {string.Join(" ", p.Passes)}");
             }
             File.WriteAllLines(FilePath, lines);
+            GameLimits.Changed();
         }
         catch (Exception e) { Plugin.L.LogWarning("players not saved: " + e.Message); }
     }

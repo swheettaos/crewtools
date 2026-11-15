@@ -13,6 +13,7 @@ namespace CrewTools;
 //   Plugin.cs      settings, start-up and shut-down (Tools), the BepInEx plugin, and the Driver that runs Tools each frame
 //   Hooks.cs       every hook into the game, one per game method; each calls the modules below
 //   Players.cs     everything kept per crew-mate (switches, trust, passes) in CrewTools.players.txt
+//   GameLimits.cs  the game's own crew limits (1.0.6 on) kept the same as the Build and Shop switches
 //   Crew.cs        the crew-mates in the game right now
 //   Guard.cs       the permission check on every crew message (from Crew Permissions by tylerun)
 //   AntiCheat.cs   money checks (tylerun) and the cheat watch (ours); what a catch gets. Alerts.cs: its popup
@@ -60,7 +61,7 @@ public sealed class Plugin : BasePlugin
 // building money held for its building, a ban reclaim's queue, cheating popups not yet answered.
 public sealed class Tools
 {
-    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.5";
+    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.6";
     internal static ConfigFile Config;                                    // set by Plugin; otherwise opened here
     internal static BepInEx.Logging.ManualLogSource Log;
     BepInEx.Logging.ManualLogSource ownLog;
@@ -98,6 +99,7 @@ public sealed class Tools
             try { harmony.CreateClassProcessor(type).Patch(); hooked++; Trace.Log("hooked " + type.Name); }
             catch (Exception e) { failed++; Plugin.L.LogError($"Couldn't hook {type.Name}; that part of Crew Tools is off: {e.Message}"); }
         }
+        GameLimits.Start(harmony);
         Plugin.Hooked = $"{hooked} game hooks in place" + (failed > 0 ? $", {failed} failed (see the log)" : "");
         Plugin.L.LogInfo($"Crew Tools {Version} {(state == null ? "loaded" : "reloaded")}: " + Plugin.Hooked);
     }
@@ -120,7 +122,7 @@ public sealed class Tools
     {
         ("window", Ui.Update), ("cheating popup", Alerts.Update), ("capsules given back", Returns.Update), ("welcome", Welcome.Update),
         ("players", Players.Update), ("cleanup", Cleanup.Update), ("removals", Remover.Update), ("protected bases", Zones.Update),
-        ("server name", ServerName.Update),
+        ("server name", ServerName.Update), ("game limits", GameLimits.Update),
     };
     bool[] off;
     float cheatErrorAt = -10f;

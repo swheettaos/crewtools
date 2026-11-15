@@ -67,7 +67,7 @@ Changed in Crew Tools (marked "Crew Tools:" in the code):
 - Its player file is merged with Crew Tools' (`CrewTools.players.txt`).
 
 Crew Tools' own: `Plugin.cs`, `Crew.cs`, `Players.cs` (trust, passes, defaults), `Zones.cs`, `Spending.cs`,
-`Owners.cs`, `Cleanup.cs`, `Welcome.cs`, `ServerName.cs`, `Ui.cs`, `Widgets.cs`, `Http.cs`, `Handover.cs`, and the
+`GameLimits.cs`, `Owners.cs`, `Cleanup.cs`, `Welcome.cs`, `ServerName.cs`, `Ui.cs`, `Widgets.cs`, `Http.cs`, `Handover.cs`, and the
 cheat watch section of `AntiCheat.cs`.
 
 ## Install
@@ -99,6 +99,7 @@ install "players: new CrewTools.players.txt (no earlier player files)".
 | | |
 |---|---|
 | **Permissions** | Per player: Build, Demolish, Sell, Shop, Capsules, each on or off. A refused sale isn't paid: dust goes back into the player's hopper, a cargo capsule is given back. Capsules moved by a tool, brush or vacuum are always allowed. |
+| **Game crew limits** | Moon Sweepers 1.0.6 adds its own per-player limits (Build, Drive, Spend: hold Tab, right mouse button). Crew Tools keeps them the same as its switches: Build to the game's Build, Shop to its Spend, both ways. Drive is the game's own. On 1.0.5 there are none, and Crew Tools works as before. |
 | **Protected bases** | Restrict only: nobody is banned for it. Crew-mates within N metres of a base's station can look but can't build, demolish, sell, shop or handle capsules. They can use their vehicles there (drive, park, recall), but not buy or upgrade one. The first time they walk into a protected base after joining they're told once in crew chat: "@name: this area (South base) is restricted." Refused actions after that are refused quietly, with no chat spam. You (the host) are never restricted. Map teleports still work. Give a crew-mate a pass for chosen bases with Passes in their player row. |
 | **Vehicles** | Crew-mates can always drive, park and recall vehicles they own, also with Shop off, inside a protected base, or over the spending cap. Only buying or upgrading a vehicle needs Shop (and no zone, and room under the cap). |
 | **Spending cap** | Each crew-mate may spend at most $X in any 30 minutes (shop, buildings, robots, vehicles), priced before the purchase goes through. Trusted players have no cap. |
