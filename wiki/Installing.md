@@ -9,7 +9,7 @@ Needs **BepInEx 6 (IL2CPP)**, as the game's other mods use. Only the host instal
 1. Download `CrewTools-<version>.zip` from [Nexus Mods](https://www.nexusmods.com/moonsweepers/mods/149) or the [latest GitHub release](https://github.com/swheettaos/crewtools/releases/latest).
 2. Close the game and unzip it into the game folder, so you get `Moon Sweepers/BepInEx/plugins/CrewTools/CrewTools.dll`.
 3. **Remove** a separate `CrewPermissions.dll` from `BepInEx/plugins` if you have it: Crew Tools includes it.
-4. Start the game. The log (`BepInEx/LogOutput.log`) says "Crew Tools x.y.z loaded: 30 game hooks in place".
+4. Start the game. The log (`BepInEx/LogOutput.log`) says "Crew Tools x.y.z loaded; it works only while you host a crew game".
 
 ## Coming from Crew Permissions
 
