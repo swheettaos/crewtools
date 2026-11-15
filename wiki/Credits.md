@@ -14,7 +14,7 @@ Rebuilt from its released DLL, renamed and commented for Crew Tools; what is che
 | `Hooks.cs` | The hooks marked "(Crew Permissions)": which game methods are checked |
 | `AntiCheat.cs` | Its money section: building money must match what was really built or removed; impossible amounts, trick money and kilograms; what a catch gets |
 | `Alerts.cs` | Telling the host about a catch (redesigned for Crew Tools) |
-| `Returns.cs` | A refused sale gives the capsule back, beside the player |
+| `Returns.cs` | A refused cargo sale gives the capsule back, beside the player |
 | `Players.cs` | The permission switches (`Switch`, `Allowed`) |
 | `Node.cs` | The five switches |
 

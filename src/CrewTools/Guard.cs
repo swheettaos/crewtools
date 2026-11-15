@@ -32,7 +32,6 @@ internal static class Guard
     {
         if (sender != 0 && seenSenders.Add(sender)) traceUntil = Time.unscaledTime + 30f;
         bool tracing = Time.unscaledTime < traceUntil;
-        if (doing.Count > 50) doing.Clear();                  // a message that threw never pops
         doing.Push(tracing ? message : null);
         if (tracing) Trace.Log($"-> {message} from {sender}");
         AntiCheat.Why = null;
@@ -47,6 +46,17 @@ internal static class Guard
         if (doing.Count > 0 && doing.Pop() is string message) Trace.Log($"<- {message} done");
         Sender = previous;
         AntiCheat.Why = null;
+    }
+
+    // At the start of each frame (Plugin.Update) no crew message is being applied, so Sender must be 0. If a message
+    // still left it set (one that died where even the finalizer couldn't run), it's cleared here and said in the log,
+    // so a stuck sender lasts one frame, never until a restart.
+    internal static void Frame()
+    {
+        doing.Clear();
+        if (Sender == 0) return;
+        Plugin.L.LogWarning($"A crew message from {Players.Name(Sender)} never finished; cleared it so nobody's actions are checked as theirs.");
+        Sender = 0; doing.Clear(); AntiCheat.Why = null;
     }
 
     // ------------------------------------------------------------------ allowed or refused
@@ -94,7 +104,12 @@ internal static class Guard
     internal static void Refused(ulong id) => refusedAt[id] = Time.unscaledTime;
     internal static bool RecentlyRefused(ulong id) => refusedAt.TryGetValue(id, out var t) && Time.unscaledTime - t <= 10f;
 
-    // ------------------------------------------------------------------ selling (a refused sale gives the capsule back)
+    // ------------------------------------------------------------------ selling (a refused cargo sale gives the capsule back)
+    // A refused dust deposit gets nothing from here: the game itself sends the dust it didn't take back to the crew-mate's
+    // hopper (MoonCrewSession.HandleWorld calls DustBack(asked - CrewDeposit's answer) straight after CrewDeposit). The
+    // capsule Crew Tools used to drop as well was that dust twice over, and the crew-mate's game, still at the station,
+    // poured the returned dust in again: refused, given back, a new capsule of hundreds of kg, round and round until the
+    // host froze and crashed (1.2.4). A refused cargo sale has no such return in the game, so its capsule is given back.
 
     internal static bool Sell(string player, MoonCargo cargo, double kilograms, string what, bool dustDeposit, ref double paid)
     {
@@ -105,7 +120,7 @@ internal static class Guard
                 AntiCheat.CheckDeposit(kilograms, atStation: true, dust: dustDeposit);   // capacity: dust deposits only
                 return true;
             }
-            Returns.GiveBack(Sender, cargo, kilograms);       // no Sell permission: not paid, and the capsule comes back
+            if (!dustDeposit) Returns.GiveBack(Sender, cargo, kilograms);   // not paid; the cargo capsule comes back
         }
         paid = 0;
         return false;

@@ -11,9 +11,8 @@ paid back to the team, one piece at a time so the game never freezes. Their vehi
 
 ## Leaving players
 
-Their vehicles go back to the garage, refunded at the vehicle price, freeing the slot. Upgrades are **not** refunded on
-leaving: a crew-mate's own game keeps them and puts them back on the next vehicle they buy, so refunding them would
-pay twice.
+A player who leaves (or crashes, or loses their connection) keeps their vehicles, upgrades and all, for when they come
+back. Vehicles are only reclaimed on a ban, and always matched by Steam id, never by name.
 
 ## Cleanup
 

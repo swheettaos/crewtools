@@ -16,7 +16,7 @@ namespace CrewTools;
 //   Crew.cs        the crew-mates in the game right now
 //   Guard.cs       the permission check on every crew message (from Crew Permissions by tylerun)
 //   AntiCheat.cs   money checks (tylerun) and the cheat watch (ours); what a catch gets. Alerts.cs: its popup
-//   Returns.cs     a refused sale's capsule given back (tylerun)
+//   Returns.cs     a refused cargo sale's capsule given back (tylerun)
 //   Zones.cs       protected bases          Spending.cs   the 30-minute spending cap
 //   Owners.cs      who built what; ban reclaim and vehicles on leaving
 //   Cleanup.cs     loose capsules every N minutes, and removals spread over frames (Remover)
@@ -60,7 +60,7 @@ public sealed class Plugin : BasePlugin
 // building money held for its building, a ban reclaim's queue, cheating popups not yet answered.
 public sealed class Tools
 {
-    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.4";
+    internal const string Guid = "swheet.moonsweepers.crewtools", Version = "1.2.5";
     internal static ConfigFile Config;                                    // set by Plugin; otherwise opened here
     internal static BepInEx.Logging.ManualLogSource Log;
     BepInEx.Logging.ManualLogSource ownLog;
@@ -127,6 +127,7 @@ public sealed class Tools
 
     public void Update()
     {
+        Guard.Frame();
         try { AntiCheat.Update(); }
         catch (Exception e)
         {

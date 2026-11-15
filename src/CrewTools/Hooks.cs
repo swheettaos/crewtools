@@ -14,33 +14,36 @@ namespace CrewTools;
 internal static class Hooks
 {
     // ================================================================== who sent each crew message (Crew Permissions)
+    // Leave is a finalizer, not a postfix: a handler that throws (its sender banned or kicked part-way through) skipped a
+    // postfix and left Guard.Sender on that player, so every later action, the host's too, was checked against their
+    // revoked permissions and nobody could build until a restart (1.2.4).
 
     [HarmonyPatch(typeof(MoonCrewSession), "HandleWorld")]
     static class World
     {
         static void Prefix(ulong sender, out ulong __state) => __state = Guard.Enter(sender, "HandleWorld");
-        static void Postfix(ulong __state) => Guard.Leave(__state);
+        static System.Exception Finalizer(System.Exception __exception, ulong __state) { Guard.Leave(__state); return __exception; }
     }
 
     [HarmonyPatch(typeof(MoonCrewSession), "HandleRobots")]
     static class Robots
     {
         static void Prefix(ulong sender, out ulong __state) => __state = Guard.Enter(sender, "HandleRobots");
-        static void Postfix(ulong __state) => Guard.Leave(__state);
+        static System.Exception Finalizer(System.Exception __exception, ulong __state) { Guard.Leave(__state); return __exception; }
     }
 
     [HarmonyPatch(typeof(MoonCrewSession), "HandleWaypoints")]
     static class Waypoints
     {
         static void Prefix(ulong sender, out ulong __state) => __state = Guard.Enter(sender, "HandleWaypoints");
-        static void Postfix(ulong __state) => Guard.Leave(__state);
+        static System.Exception Finalizer(System.Exception __exception, ulong __state) { Guard.Leave(__state); return __exception; }
     }
 
     [HarmonyPatch(typeof(MoonCrewSession), "HandleLandmarks")]
     static class Landmarks
     {
         static void Prefix(ulong sender, out ulong __state) => __state = Guard.Enter(sender, "HandleLandmarks");
-        static void Postfix(ulong __state) => Guard.Leave(__state);
+        static System.Exception Finalizer(System.Exception __exception, ulong __state) { Guard.Leave(__state); return __exception; }
     }
 
     // Crew Tools: vehicle messages (driving, parking, recalling) always go through - the original refused the whole
@@ -49,7 +52,7 @@ internal static class Hooks
     static class Vehicles
     {
         static void Prefix(ulong sender, out ulong __state) => __state = Guard.Enter(sender, "HandleOwnedVehicles");
-        static void Postfix(ulong __state) => Guard.Leave(__state);
+        static System.Exception Finalizer(System.Exception __exception, ulong __state) { Guard.Leave(__state); return __exception; }
     }
 
     // ================================================================== money
@@ -233,12 +236,10 @@ internal static class Hooks
 
     // ================================================================== players coming and going
 
-    // leaving: their vehicles back to the garage, refunded (Owners), before the game drops them; then the money ledger
-    // is forgotten
+    // leaving: their money ledger is forgotten (their vehicles stay theirs: Owners)
     [HarmonyPatch(typeof(MoonWorld), "CrewmateLeft")]
     static class Left
     {
-        static void Prefix(string player) => Owners.Left(player);
         static void Postfix(string player) { if (ulong.TryParse(player, out var id)) AntiCheat.Forget(id); }
     }
 

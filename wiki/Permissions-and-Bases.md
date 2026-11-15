@@ -3,7 +3,8 @@
 ## Permissions
 
 Per player: **Build**, **Demolish**, **Sell**, **Shop**, **Capsules**, each on or off (Players tab: orange = on, click to
-switch). A refused sale gives the capsule back, beside the player. Capsules moved by a tool, brush or vacuum are always
+switch). A refused sale isn't paid: refused dust goes back into the player's hopper (the game does that itself), and a refused
+cargo capsule is given back, beside the player. Capsules moved by a tool, brush or vacuum are always
 allowed.
 
 **New players** start with the switches you choose on the Rules tab (default: build, sell, shop, capsules on;

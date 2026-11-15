@@ -371,8 +371,8 @@ internal static class Ui
         }
         manageNote = Label(popup, "", new Vector2(0, -h / 2 + 100), new Vector2(520, 50), 17, Dim, TextAnchor.MiddleCenter);
         // the vehicle refund preview, in the note line under the buttons (a line under the title didn't show - user)
-        var (vc, vb, vu) = Owners.VehicleValue(id, name);
-        vehicleLine = vc == 0 ? "No vehicles." : $"{vc} vehicle{(vc == 1 ? "" : "s")}: leaving refunds ${vb:0}; a ban refunds ${vb + vu:0} (+ upgrades ${vu:0})";
+        var (vc, vb, vu) = Owners.VehicleValue(id);
+        vehicleLine = vc == 0 ? "No vehicles." : $"{vc} vehicle{(vc == 1 ? "" : "s")}: kept when they leave; a ban refunds ${vb + vu:0} (+ upgrades ${vu:0})";
         manageNote.text = vehicleLine; manageNote.color = Cream;
         Button(popup, "Done", new Vector2(0, -h / 2 + 40), new Vector2(160, 46), () => { ClosePasses(); Refresh(); }, true);
         Refresh();

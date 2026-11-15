@@ -32,7 +32,7 @@ crew keeps playing while it updates. See [[With LunarLink]].
 ```mermaid
 flowchart LR
   msg["A crew-mate's message<br/>(build, demolish, sell, shop, capsule)"] --> sw{"Their switch<br/>for it on?"}
-  sw -- "no" --> no["Refused quietly<br/>(a sale's capsule given back)"]
+  sw -- "no" --> no["Refused quietly<br/>(not paid; the goods given back)"]
   sw -- "yes" --> zone{"Inside a protected base<br/>without a pass?"}
   zone -- "yes" --> no
   zone -- "no" --> cap{"Over their<br/>30-minute cap?"}

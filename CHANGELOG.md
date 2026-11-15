@@ -2,6 +2,19 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## 1.2.5
+
+- **Fixed: the host crashed when a crew-mate's dust sale was refused** (no Sell permission, or a protected base). The
+  game already returns refused dust to the player's hopper; Crew Tools dropped a capsule of the same dust as well, and
+  the player's game, still at the station, poured it in again: refused, given back, round and round until the host
+  froze and crashed. Refused dust now just goes back into the hopper. A refused cargo capsule is still given back.
+- **Fixed: after a cheater was caught, nobody could build until a restart**, the host included. A crew message cut short
+  by the ban left Crew Tools thinking every later action was the cheater's. It now always finishes the message, and
+  clears it at the next frame if anything was ever left over.
+- **Fixed: crew-mates lost their vehicle upgrades.** Vehicles were taken back to the garage on every leave (a crash or
+  dropped connection too), and matched by display name as well, so same-named players could lose each other's.
+  Leaving players now keep their vehicles; only a ban reclaims them, matched by Steam id only.
+
 ## 1.2.4
 
 - **The window's rows match Quantum Conveyors' menu:** cream like the window, set apart by their gradient, with dark

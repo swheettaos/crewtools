@@ -1,4 +1,5 @@
-// Returns: a sale refused for lack of the Sell permission gives the capsule back, dropped beside the player.
+// Returns: a cargo sale refused for lack of the Sell permission gives the capsule back, dropped beside the player.
+// (Refused dust deposits don't come here: the game returns that dust to the player's hopper itself; see Guard.Sell.)
 //
 // From Crew Permissions by tylerun (nexusmods.com/moonsweepers/mods/71), rebuilt from the released DLL and tidied for
 // Crew Tools. Guard queues the refusal; the capsule is made on the next frame (outside the crew message).

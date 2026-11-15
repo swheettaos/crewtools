@@ -51,7 +51,7 @@ is tylerun's design):
 | `Hooks.cs` | The hooks marked "(Crew Permissions)": which game methods are checked |
 | `AntiCheat.cs` | Its money section: building money must match what was really built or removed; impossible amounts, trick money and kilograms are caught; and what a catch gets (all permissions off, then ban, kick or ask the host) |
 | `Alerts.cs` | Telling the host about a catch (redesigned for Crew Tools) |
-| `Returns.cs` | A refused sale gives the capsule back, beside the player |
+| `Returns.cs` | A refused cargo sale gives the capsule back, beside the player |
 | `Players.cs` | The permission switches (`Switch`, `Allowed`); the rest of the player record is Crew Tools' |
 | `Node.cs` | The five switches |
 
@@ -98,7 +98,7 @@ install "players: new CrewTools.players.txt (no earlier player files)".
 
 | | |
 |---|---|
-| **Permissions** | Per player: Build, Demolish, Sell, Shop, Capsules, each on or off. A refused sale gives the capsule back. Capsules moved by a tool, brush or vacuum are always allowed. |
+| **Permissions** | Per player: Build, Demolish, Sell, Shop, Capsules, each on or off. A refused sale isn't paid: dust goes back into the player's hopper, a cargo capsule is given back. Capsules moved by a tool, brush or vacuum are always allowed. |
 | **Protected bases** | Restrict only: nobody is banned for it. Crew-mates within N metres of a base's station can look but can't build, demolish, sell, shop or handle capsules. They can use their vehicles there (drive, park, recall), but not buy or upgrade one. The first time they walk into a protected base after joining they're told once in crew chat: "@name: this area (South base) is restricted." Refused actions after that are refused quietly, with no chat spam. You (the host) are never restricted. Map teleports still work. Give a crew-mate a pass for chosen bases with Passes in their player row. |
 | **Vehicles** | Crew-mates can always drive, park and recall vehicles they own, also with Shop off, inside a protected base, or over the spending cap. Only buying or upgrading a vehicle needs Shop (and no zone, and room under the cap). |
 | **Spending cap** | Each crew-mate may spend at most $X in any 30 minutes (shop, buildings, robots, vehicles), priced before the purchase goes through. Trusted players have no cap. |
@@ -108,7 +108,7 @@ install "players: new CrewTools.players.txt (no earlier player files)".
 | **Server name** | Your server name, saved and put on every game you host. |
 | **Cleanup** | Every N minutes, loose capsules and bricks lying around are removed, with a crew-chat warning a minute before. Spread over frames so the game doesn't hitch. |
 | **Ban reclaim** | Ban someone and everything they built (buildings, robots, belts) and their vehicles is removed with the game's normal refund paid back to the team, a piece at a time, no freeze. |
-| **Leaving players** | Their vehicles go back to the garage, refunded (vehicle price), freeing the slot. Upgrades are not refunded on leaving: a crew-mate's own game keeps them and puts them back on the next vehicle they buy. On a ban the refund includes every upgrade level bought, at the game's prices. |
+| **Leaving players** | Keep their vehicles, upgrades and all, for when they come back (a crash or lost connection too). Vehicles are only reclaimed on a ban, matched by Steam id: refunded at the garage price plus every upgrade level bought, at the game's prices. |
 
 ## Cheat watch
 

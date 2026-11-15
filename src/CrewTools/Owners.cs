@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace CrewTools;
 
-// Owners: who built what, ban reclaim, and vehicles on leaving.
+// Owners: who built what, and the ban reclaim (their pieces and vehicles).
 // The game doesn't record who built a structure, so this does: every structure or belt that appears while the game
 // applies a crew-mate's building message is theirs (CrewTools.owners.txt). When someone is banned, everything of
 // theirs still standing is removed and the game's normal refund for each piece goes back to the team money.
@@ -51,22 +51,18 @@ internal static class Owners
         try
         {
             string name = Players.Name(id);
-            var (pieces, dollars) = Reclaim(id); var (cars, carDollars) = ReclaimVehicles(id.ToString(), name, upgrades: true);
+            var (pieces, dollars) = Reclaim(id); var (cars, carDollars) = ReclaimVehicles(id);
             Plugin.L.LogInfo($"banned {name}: {pieces} pieces and {cars} vehicles reclaimed, ${dollars + carDollars:0} back");
         }
         catch (Exception e) { Plugin.L.LogWarning("reclaim: " + e.Message); }
     }
-    // a crew-mate left (not banned): their vehicles go back to the garage, refunded, so the slot is free for others
-    internal static void Left(string player)
-    {
-        try
-        {
-            string name = null; if (ulong.TryParse(player, out var id)) name = Players.Name(id);
-            var (cars, dollars) = ReclaimVehicles(player, name, upgrades: false);
-            if (cars > 0) Plugin.L.LogInfo($"{name ?? player} left: {cars} vehicles returned, ${dollars:0} back");
-        }
-        catch (Exception e) { Plugin.L.LogWarning("vehicles on leave: " + e.Message); }
-    }
+    // A crew-mate who just leaves keeps their vehicles, upgrades and all, for when they come back. (Up to 1.2.4 they were
+    // reclaimed on every leave, a crash or dropped connection too, and matched by display name as well, so players lost
+    // upgrades, and same-named players each other's vehicles.) Only a ban reclaims them.
+
+    // this player's vehicle: by Steam id only (the game writes it as "<id>" or "steam-<id>"), never the host's
+    static bool Theirs(MoonOwnedVehicle v, ulong id) =>
+        v != null && v.owner != "local" && (v.owner == id.ToString() || v.owner == "steam-" + id);
 
     // their vehicles off the owned list (and out of the world if they're out), refunded at the garage price - tested
     // with the host's own push sweeper (stored) and ride-on (out), 2026-11-09
@@ -120,32 +116,26 @@ internal static class Owners
     }
 
     // what reclaiming this player's vehicles would pay back now: (vehicles, garage prices, upgrades) - for the panel
-    internal static (int count, double basePrice, double upgrades) VehicleValue(ulong id, string name)
+    internal static (int count, double basePrice, double upgrades) VehicleValue(ulong id)
     {
         var w = Crew.World(); if (w == null) return (0, 0, 0);
-        int n = 0; double b = 0, u = 0; string sid = "steam-" + id;
+        int n = 0; double b = 0, u = 0;
         foreach (var kv in w.ownedVehicles)
         {
-            var v = kv.Value; if (v == null || v.owner == "local") continue;
-            if (v.owner != sid && v.owner != id.ToString() && !(!string.IsNullOrEmpty(name) && v.ownerName == name)) continue;
+            var v = kv.Value; if (!Theirs(v, id)) continue;
             n++; foreach (var o in MoonWorld.GarageOffers) if (o.vehicle == v.vehicle) { b += Il2CppSystem.Decimal.ToDouble(o.price); break; }
-            u += UpgradeSpend(v, out var lv); Plugin.L.LogInfo($"{name}'s vehicle {v.vehicle}: upgrades {lv}");
+            u += UpgradeSpend(v, out var lv); Plugin.L.LogInfo($"{Players.Name(id)}'s vehicle {v.vehicle}: upgrades {lv}");
         }
         return (n, b, u);
     }
 
-    // upgrades: refund what was paid for them too - only on a ban. A crew-mate's own game keeps their upgrade levels
-    // and sends them with the next vehicle they buy (a crew-mate bought vehicle 21 again for $6,000 and had Speed 3,
-    // Hopper 3... straight back, 2026-11-09), so refunding upgrades when they just leave pays them twice.
-    internal static (int count, double dollars) ReclaimVehicles(string owner, string ownerName, bool upgrades)
+    // a banned player's vehicles off the owned list (and out of the world if they're out), refunded at the garage price
+    // plus everything paid for their upgrades
+    internal static (int count, double dollars) ReclaimVehicles(ulong id)
     {
-        var w = Crew.World(); if (w == null || string.IsNullOrEmpty(owner)) return (0, 0);
+        var w = Crew.World(); if (w == null) return (0, 0);
         var keys = new List<string>();
-        foreach (var kv in w.ownedVehicles)
-        {
-            var v = kv.Value; if (v == null || v.owner == "local") continue;               // never the host's
-            if (v.owner == owner || (!string.IsNullOrEmpty(ownerName) && ownerName != "crewmate" && v.ownerName == ownerName)) keys.Add(kv.Key);
-        }
+        foreach (var kv in w.ownedVehicles) if (Theirs(kv.Value, id)) keys.Add(kv.Key);
         int n = 0; double total = 0;
         foreach (var key in keys)
         {
@@ -153,8 +143,8 @@ internal static class Owners
             {
                 var v = w.ownedVehicles.get_Item(key); double price = 0;
                 foreach (var o in MoonWorld.GarageOffers) if (o.vehicle == v.vehicle) { price = Il2CppSystem.Decimal.ToDouble(o.price); break; }
-                double up = upgrades ? UpgradeSpend(v, out var levels) : 0;     // only on a ban (see above)
-                Plugin.L.LogInfo($"reclaim {v.ownerName}'s vehicle {v.vehicle}: ${price:0}" + (upgrades ? $" + upgrades ${up:0}" : " (upgrades stay with the player - not refunded)"));
+                double up = UpgradeSpend(v, out var levels);
+                Plugin.L.LogInfo($"reclaim {v.ownerName}'s vehicle {v.vehicle}: ${price:0} + upgrades ${up:0}");
                 price += up;
                 if (w.garageVehicles.ContainsKey(key)) { var pv = w.garageVehicles.get_Item(key); if (pv != null) UnityEngine.Object.Destroy(pv.gameObject); w.garageVehicles.Remove(key); }
                 w.ownedVehicles.Remove(key); n++; total += price;
