@@ -193,6 +193,7 @@ internal static class Http
 
     static string CleanupNow()
     {
+        if (!Crew.Hosting) return Fail("only while you host a game");
         if (!Plugin.CleanupOn.Value) return Fail("the cleanup is off (settings: cleanup=1)");
         Cleanup.Soon();
         return Json(new { ok = true, done = "cleanup in 1 minute; the warning is in crew chat now" });

@@ -72,8 +72,7 @@ internal static class Hooks
             if (double.IsNaN(__state)) return;
             double after;
             try { after = Decimal.ToDouble(__instance.get_Item(player)); } catch { return; }
-            if (!MoonSteamLobby.InLobby || MoonSteamLobby.IsHost)
-                try { AntiCheat.MoneyChanged(__state, after); } catch (System.Exception e) { Plugin.L.LogWarning("Money audit: " + e.Message); }
+            try { AntiCheat.MoneyChanged(__state, after); } catch (System.Exception e) { Plugin.L.LogWarning("Money audit: " + e.Message); }
             Spending.Spent(Guard.Sender, __state - after);
         }
     }

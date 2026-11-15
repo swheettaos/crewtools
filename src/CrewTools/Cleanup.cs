@@ -17,13 +17,15 @@ internal static class Cleanup
         float now = Time.unscaledTime, every = Plugin.CleanupMinutes.Value * 60f;
         if (next > now + every) { next = now + every; warned = false; }                  // made shorter in the panel
         if (next < 0) { next = now + every; warned = false; return; }
-        if (!warned && now >= next - 60f) { warned = true; if (MoonSteamLobby.InLobby) Chat.Say("Cleanup in 1 minute: loose capsules on the ground will be removed."); }
+        if (!warned && now >= next - 60f) { warned = true; Chat.Say("Cleanup in 1 minute: loose capsules on the ground will be removed."); }
         if (now < next) return;
         next = now + every; warned = false;
         int n = Run();
         Plugin.L.LogInfo($"cleanup: {n} loose capsules removed");
-        if (MoonSteamLobby.InLobby && n > 0) Chat.Say($"Cleanup: removing {n} loose capsules.");
+        if (n > 0) Chat.Say($"Cleanup: removing {n} loose capsules.");
     }
+    // hosting started: the first cleanup a full period from now
+    internal static void Restart() { next = -1f; warned = false; }
     // HTTP: the next cleanup in one minute (the usual warning in crew chat goes out now)
     internal static void Soon() { next = Time.unscaledTime + 60f; warned = false; }
 

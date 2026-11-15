@@ -2,6 +2,12 @@
 
 Each release's section is its notes on the GitHub releases page (`tools/release.sh` tags it; GitHub publishes it).
 
+## Unreleased
+
+- **Crew Tools only works while you host a crew game.** Playing alone or in someone else's game it does nothing at
+  all: no game hooks, no crew-chat messages, no capsule cleanup, no money log. Its hooks go in when you start hosting
+  and come out when you stop; the CREW TOOLS window still opens, so you can set things up beforehand.
+
 ## 1.2.6
 
 - **Works with Moon Sweepers 1.0.5 and the 1.0.6 preview.** 1.0.6 gives the game its own crew limits, Build, Drive

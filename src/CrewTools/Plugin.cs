@@ -90,23 +90,44 @@ public sealed class Tools
         Players.Load();
         Owners.Load();
         if (state != null) Handover.Load(state);
-        // every game hook (Hooks.cs); one that can't be applied is logged and skipped, the rest still work
         harmony = new Harmony(Guid);
-        int hooked = 0, failed = 0;
+        Plugin.Hooked = Idle;
+        Plugin.L.LogInfo($"Crew Tools {Version} {(state == null ? "loaded" : "reloaded")}; it works only while you host a crew game");
+    }
+
+    // Crew Tools only works while you host a crew game (user, 2026-11-15): playing alone or in someone else's game it
+    // has no game hooks in, says nothing in chat and cleans nothing up. The hooks go in when hosting starts and come out
+    // when it stops.
+    const string Idle = "Not hosting: Crew Tools is idle";
+    bool hooked;
+
+    void Hook()
+    {
+        // every game hook (Hooks.cs); one that can't be applied is logged and skipped, the rest still work
+        int n = 0, failed = 0;
         foreach (var type in typeof(Hooks).GetNestedTypes(AccessTools.all))
         {
             if (type.GetCustomAttributes(typeof(HarmonyPatch), false).Length == 0) continue;
-            try { harmony.CreateClassProcessor(type).Patch(); hooked++; Trace.Log("hooked " + type.Name); }
+            try { harmony.CreateClassProcessor(type).Patch(); n++; Trace.Log("hooked " + type.Name); }
             catch (Exception e) { failed++; Plugin.L.LogError($"Couldn't hook {type.Name}; that part of Crew Tools is off: {e.Message}"); }
         }
         GameLimits.Start(harmony);
-        Plugin.Hooked = $"{hooked} game hooks in place" + (failed > 0 ? $", {failed} failed (see the log)" : "");
-        Plugin.L.LogInfo($"Crew Tools {Version} {(state == null ? "loaded" : "reloaded")}: " + Plugin.Hooked);
+        Cleanup.Restart();
+        hooked = true;
+        Plugin.Hooked = $"{n} game hooks in place" + (failed > 0 ? $", {failed} failed (see the log)" : "");
+        Plugin.L.LogInfo("Hosting: Crew Tools on, " + Plugin.Hooked);
+    }
+
+    void Unhook()
+    {
+        harmony.UnpatchSelf(); hooked = false; Guard.Sender = 0;
+        Plugin.Hooked = Idle;
+        Plugin.L.LogInfo("Not hosting: Crew Tools idle (game hooks out)");
     }
 
     public string Stop()
     {
-        harmony?.UnpatchSelf(); harmony = null;
+        harmony?.UnpatchSelf(); harmony = null; hooked = false;
         Ui.Stop(); Alerts.Stop(); Widgets.Stop();
         try { Players.Save(); } catch (Exception e) { Plugin.L.LogWarning("saving players: " + e.Message); }
         var state = Handover.Save();
@@ -120,15 +141,19 @@ public sealed class Tools
     // switched off (held building money would never be paid); its errors are logged at most every 10 s.
     readonly (string name, Action run)[] modules =
     {
-        ("window", Ui.Update), ("cheating popup", Alerts.Update), ("capsules given back", Returns.Update), ("welcome", Welcome.Update),
+        ("cheating popup", Alerts.Update), ("capsules given back", Returns.Update), ("welcome", Welcome.Update),
         ("players", Players.Update), ("cleanup", Cleanup.Update), ("removals", Remover.Update), ("protected bases", Zones.Update),
         ("server name", ServerName.Update), ("game limits", GameLimits.Update),
     };
     bool[] off;
-    float cheatErrorAt = -10f;
+    float cheatErrorAt = -10f, uiErrorAt = -10f;
 
     public void Update()
     {
+        try { Ui.Update(); } catch (Exception e) { if (Time.unscaledTime - uiErrorAt > 10f) { uiErrorAt = Time.unscaledTime; Plugin.L.LogWarning("window: " + e.Message); } }
+        bool hosting = Crew.Hosting;
+        if (hosting != hooked) { if (hosting) Hook(); else Unhook(); }
+        if (!hosting) return;
         Guard.Frame();
         try { AntiCheat.Update(); }
         catch (Exception e)

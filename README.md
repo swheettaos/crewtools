@@ -192,6 +192,8 @@ held for its building, a ban reclaim in progress, cheating popups not answered y
 
 ## Notes
 
+- Crew Tools only works while you host a crew game. Playing alone or in someone else's game it does nothing (no
+  hooks, chat messages or cleanup); the window still opens for setting it up.
 - Who built what is only known for pieces built while Crew Tools is installed.
 - Crew chat goes to everyone; the game has no private messages.
 - If one part of Crew Tools hits an error, only that part stops (the log says which); the rest keeps working.

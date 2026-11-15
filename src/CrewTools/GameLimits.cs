@@ -58,13 +58,12 @@ internal static class GameLimits
     // Players.Save: a switch may have changed, so look again at the next update
     internal static void Changed() => dirty = true;
 
-    // Once a second while something changed: every known player's game limits set from their switches. Only on the
-    // machine that owns the limits (playing alone, or hosting); a crew-mate's game reads the host's.
+    // Once a second while something changed (and only while hosting, like all of Crew Tools): every known player's game
+    // limits set from their switches, saved and sent to the crew.
     internal static void Update()
     {
         if (!Present || !dirty || Time.unscaledTime < nextLook) return;
         nextLook = Time.unscaledTime + 1f;
-        if (MoonSteamLobby.InLobby && !MoonSteamLobby.IsHost) return;
         dirty = false;
         foreach (var p in Players.All)
         {
@@ -88,8 +87,7 @@ internal static class GameLimits
         applying = true;
         try
         {
-            if (MoonSteamLobby.InLobby) lobbySet.Invoke(null, new object[] { p.Id, limit });   // saved and sent to the crew
-            else set.Invoke(null, new object[] { p.Id, p.Name, limit });                        // saved for the next game
+            lobbySet.Invoke(null, new object[] { p.Id, limit });                                   // saved and sent to the crew
             Trace.Log($"game limits for {p.Name}: {off}");
         }
         catch (Exception e) { Plugin.L.LogWarning($"Game crew limits: couldn't set {p.Name}'s: {e.InnerException?.Message ?? e.Message}"); }
